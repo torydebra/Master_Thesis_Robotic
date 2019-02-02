@@ -1,0 +1,169 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+% THESIS INTRODUCTION
+
+
+% TODO identazioen dopo ogni progetto/paragrafo o no?
+\chapter{Introduction}
+\label{chap:introduction}
+\ifpdf
+    \graphicspath{{Introduction/Figures/PNG/}{Introduction/Figures/PDF/}{Introduction/Figures/}}
+\else
+    \graphicspath{{Introduction/Figures/EPS/}{Introduction/Figures/}}
+\fi
+
+Nowadays, different kinds of robot are largely used for underwater missions. A particular type of submarine robot is the Underwater Vehicle Manipulator System (UVMS): an autonomous underwater vehicle (AUV) capable of accomplishing tasks that require a certain level of dexterity, thanks to single or multiple arms.\\
+A really innovative field for underwater missions is the analysis of cooperation between multiple agents, which permits to extend their flexibility. Cooperative robots are two or more robots, identical or different, that coordinate themselves autonomously (i.e.\ without human intervention) to accomplish various objectives, from mapping an area to assembling an object.   
+
+This thesis focuses on a totally unexplored environment: cooperative \textit{peg-in-hole} assembly with underwater manipulators. It is part of the TWINBOT project, which is devoted to make a step forward to missions in complex scenarios.\\
+The experimental set-up is made up of two I-AUV's Girona 500 underwater vehicles, each one equipped with a CSIP Robot arm5E (4 DOF arm with a parallel yaw gripper). The final goal is to successfully coordinate the robots in such a way that the peg, hold by one manipulator, is inserted correctly in the other piece, hold by the second manipulator.
+The work focuses on the kinematic layer, adopting inverse kinematic algorithms based on task's priority (TPIK), although for the peg-in-hole task particular attention must be paid to dynamics interactions. Also the communication problems that arise under the water must be taken into account.  \\
+The whole work is divided in two step: 
+
+The first step is to adapt solutions of previous works to pick up, recover and transport the objects using two intervention vehicles. This step is based on previous results from MARIS [\cite{IntroMaris0}], TRIDENT [\cite{AbstractTrident}], and MERBOTS [\cite{AbstractMerbots}] projects.
+
+The step further analyses the peg-in-hole problem, with the aim to solve the assembly task (\textit{M4} milestone of TWINBOT). The chosen strategy divides the problem in two phases: Approaching and Insertion. In the first preliminary tasks are done to prepare the assembly, like aligning correctly the end-effectors of the two manipulators. The second phase explores all the problems inherent to the interaction between the \textit{peg} and the \textit{hole}. The work aims to find a solution to make the robots \textit{cooperate}, understanding the forces exchanged between them while they are assembling the parts.
+
+\section{State of the Art}
+Robots have been massively introduced in various fields to help humans in different tasks. Nowadays, there are strategies to use them in underwater environments. A manipulator (robot arm) is considered to be the most suitable tool for executing sub-sea intervention operations. Hence, unmanned underwater vehicles (UUVs), such as remotely operated vehicles (ROVs) and autonomous underwater vehicles (AUVs), are equipped with one or more underwater manipulators.
+
+During the last 20 years, underwater manipulators have been used for many different sub-sea tasks in various fields, for example, underwater archaeology [\cite{IntroApp4}; \cite{IntroApp3}], marine geology [\cite{IntroApp1}; \cite{IntroApp2}], and military applications [\cite{IntroApp5}].
+
+There are many specific tasks where the underwater manipulators are important, from salvage of sunken objects [\cite{IntroSpecApp1}] to mine disposal [\cite{IntroSpecApp2}; \cite{IntroSpecApp3}]. One particular scenario is towards the oil and gas industry, where underwater manipulators are used for pipe inspection, opening and closing valves, drilling, rope cutting [\cite{IntroSpecApp4}], and, in general, to reduced field maintenance and development costs [\cite{IntroSpecApp5}]. A recent survey explored the market related to this technology for oil and gas industry [\cite{IntroSpecApp6}].
+
+\subsection{Previous Works in Underwater Missions}
+Since early '90s, research in marine robotics started focusing on the development of underwater vehicle manipulator systems (UVMS). ROVs have been largely used, but they have high operational costs. This is due to the need for expensive support vessels, and highly qualified man power effort. In addition, the pilot which operates the vehicle and the arm experiences heavy fatigue in order to carry out the manipulation task.\\
+
+
+%first works
+For the above reasons, the research started to increase the effort toward augmenting the autonomy level in underwater manipulation. For example, to reduce the operator’s fatigue, some autonomous control features were implemented in work class ROVs [\cite{IntroTeleopRov}]. Another solution is to completely replace ROVs with autonomous underwater vehicles (AUVs).
+
+Some pioneering projects in this field carried out in the '90s. The AMADEUS project [\cite{IntroAMADEUS1}] developed grippers for underwater manipulation [\cite{IntroAMADEUS2}] and studied the problem of dual arm manipulation [\cite{IntroAMADEUS3}].
+
+The UNION project [\cite{IntroUNION}] was the first to perform a mechatronic assembly of an autonomous UVMS.\\
+
+
+% dopo
+Early 2000s showed many field demonstrations. The SWIMMER project [\cite{IntroSwimmer1}] developed a prototype autonomous vehicle to deploy a ROV mounted on an AUV. This permitted to remove the need of long umbilical cables and continuous support by vessels on sea surface.
+
+This work was followed by the ALIVE project [\cite{IntroAlive1}; \cite{IntroAlive2}], that achieved autonomous docking of Intervention-AUV (I-AUV) into to a sub-sea structure not specifically created for AUV use.
+
+The SAUVIM [\cite{IntroSauvim1}; \cite{IntroSauvim2}] project carried out the first autonomous floating underwater intervention. It focused on the searching and recovering of an object whose position was roughly known a priori. Here, the AUV weighted 6 tons, and the arm only 65 kg, so the dynamics of the two subsystems were practically decoupled and the two controllers were separated. The mission consisted in the AUV performing station keeping while the arm was recovering the object.
+
+After SAUVIM, a project called RAUVI [\cite{IntroRauvi}] took a step further. Here, the AUV performed a hook-based recovery in a water tank. Again, the control of the vehicle and the arm was separated, even if the Girona 500 light AUV and the small 4-degrees-of-freedom (DOF) arm used had more similar masses than the ones used in SAUVIM.
+
+A milestone was the TRIDENT project [\cite{IntroTrident1}]. For the first time, the vehicle and the arm were controlled in a coordinated manner [\cite{IntroTrident2}] to recovery a black-box mockup [\cite{IntroTrident4}]. The used task priority solution dealt with both equality and inequality control objectives, although the inequality ones were only-scalar, except for the joint limits. This permitted to perform some manipulation tasks \textit{while} considering also other objectives, for example, keeping the object centred in the camera frame. In this project, only the kinematic control layer (and not also a suitable dynamic one) was implemented.
+
+The PANDORA project [\cite{IntroPandora1}] focused on increasing the autonomy of the robot, by recognizing failures and responding to them. The work combined machine learning techniques [\cite{IntroPandora2}] and a task priority kinematic control approach [\cite{IntroPandora3}]. However it dealt with only equality control objectives, with a specific ad-hoc solution to manage the joint limit inequality task.
+
+The TRIDENT concepts were enhanced within the MARIS project [\cite{IntroMaris0}]. The used task priority framework [\cite{IntroMaris1}] permitted to \textit{activate} and \textit{deactivate} equality/inequality control objectives of any dimension (not only scalar ones). This project also extended the problem to cooperative agents [\cite{IntroMaris2}].\\
+
+
+%actual projects
+TRIDENT and MARIS concentrated on using the control framework to perform only grasping actions. Recent work  [\cite{IntroRecent}] analyses how the method can be used in different scenarios, like pipeline inspection and deep sea mining exploration.
+
+The DexROV project [\cite{IntroDexrov}] is studying latencies problems which arise de-localizing on the shore the manned support to ROV operations.
+
+The PROMETEO project [\cite{IntroPrometeo}] plans to improve the use of underwater robotics in archaeological sites. It investigates the manipulation capacity when occlusions of objects can occur and with a wireless communication system to use the robot without umbilical cable.
+
+The ROBUST project [\cite{IntroRobust}] aims to explore and to map deep water mining sites, through the fusion of two technologies: laser-based in-situ element-analysing, and AUV techniques for sea bed 3D mapping.
+
+
+\subsection{The Control Framework}
+\label{subsec:ControlFramework}
+In the '90s, industrial robotics researches focused on how to specify control objectives of a robotic system. This was done especially for redundant systems, i.e.\, systems with more degree of freedoms (DOFs) than necessary. This surplus is useful to perform multiple, parallel tasks; for example, avoiding an obstacle with the whole arm while the end-effector is reaching a goal. Given that such systems need to complete different goals, it has become important to have a simple and effective way to specify the control objectives.\\
+
+
+The task-based control [\cite{IntroTpik1}], also known as operational space control [\cite{IntroTpik2}], defined the control objectives in a coordinate system that is directly linked to the tasks that need to be performed. This idea was followed by the concept of task priority [\cite{IntroTpik3}]. In this theory, a more important task is executed together with a less important task. To accomplish the whole action, the secondary task is attempted only in the null space of the primary one. This means that the secondary task is executed \textit{only if} it does not go against the accomplishment of the first.
+
+This concept was later generalized to multiple task priority levels [\cite{IntroTpik4}]. These works putted the position control of the end-effector as the highest prioritized one, while safety tasks (like joint limits) were only \textit{attempted} at lower priority level.\\
+
+
+First studies in control of redundant manipulators [\cite{IntroTpik6}; \cite{IntroTpik5}] managed the free residual DOF in such a way to solve the problem of singularity and obstacle avoidance for an industrial manipulator. Another work [\cite{IntroTpik7}] introduced the use of potential functions in industrial manipulators and mobile robots.
+
+A different solution [\cite{IntroTpik8}] proposed a suboptimal approach. The secondary task was solved as if it was alone, but after it was projected in the null space of the higher priority one. To deal with singularities, a variable damping factor was used [\cite{IntroTpik1}]. This solution was later enhanced and called null-space-based behavioural control [\cite{IntroTpik9}].\\
+The approach does not deal with the problem of algorithmic singularities that can occur due to rank loss caused by the projection matrix. Further works [\cite{IntroTpik11}; \cite{IntroTpik10}] focused on this problem.\\
+
+
+Since those times, the task priority framework has been applied to numerous robotic systems, other than redundant industrial manipulators. Some examples includes mobile manipulators [\cite{IntroTpik12}; \cite{IntroTpik13}; \cite{IntroTpik14}], multiple coordinated manipulators [\cite{IntroTpik15}; \cite{IntroTpik16}], modular robots [\cite{IntroTpik17}], and humanoid robots [\cite{IntroTpik18}; \cite{IntroTpik19}]. Furthermore, a stability analysis for several prioritized inverse kinematics algorithms can be found in [\cite{IntroTpik20}].\\
+
+
+The problem of the classical task priority framework, evident in all the previous mentioned works, is that inequality control objectives (e.g.\ avoiding
+joint limits) were never treated as such. In fact, the corresponding tasks were always active, like the equality ones. So, for example, also when the joints are sufficiently far from their limits, the fact that the task is active uselessly adds constraints and ``consumes" DOFs.
+Thus, without a transition, the safety control objectives like joint limits could be only considered as secondary. Otherwise, they would consume DOFs, and mission tasks, like reaching a position with the end-effector, can never be accomplished. This led to an undesired situation where safety tasks have a lower priority with respect to non-safety ones.\\
+
+
+The challenge in activating (inserting) or deactivating (deleting) a task is that these transitions would imply a discontinuity in the null space projector, which leads to a discontinuity in the control law [\cite{IntroTpik21}]. Thus, in the last decade, researches focused on integrate safety inequality control objectives in a more efficient way. 
+
+A new inversion operator was introduced [\cite{IntroTpik22}] for the computation of a smooth inverse with the ability of enabling and disabling tasks in the context of visual servoing. But the work only dealt with the activation and deactivation of the rows of a single multidimensional task (so, not including the concept of different levels of priority). The extension to the case of a hierarchy of tasks with different priorities was provided successively [\cite{IntroTpik23}]. However, the algorithm requires the computation of all the combinations of possible active and inactive tasks, which grows exponentially as the number of tasks increases.
+
+Another work [\cite{IntroTpik21}] modified the reference of each task that was being inserted or being removed, in order to comply with the already present ones, and in such a way to smooth out any discontinuity. However, the algorithm requires $m!$ pseudo-inverses with $m$ number of tasks. For this reason, the authors provided approximate solutions, which are suboptimal whenever more than one task is being activated or deactivated.
+
+Another approach [\cite{IntroTpik25}] directly incorporated the inequality control objectives as inequality constraints in a Quadratic Program (QP). According to this, the idea was generalized to any number of priority levels [\cite{IntroTpik26}]. At each priority level, the algorithm solves a QP problem, finding the optimal solution (in a least-squares sense). Slack variables are used to incorporate inequality constraints in the minimization process. If the solution contains a slack variable different from zero, it will mean that the corresponding inequality constraint is not satisfied. Otherwise, the inequality constraints are propagated to the next level and transformed into an equality ones (to prevent lower priority tasks from changing the best least-square trade-off found). A similar process is done for the equality constraints. A drawbacks of this approach is that the cascade of QP problems can grow in dimension. Another issue is that the activation and deactivation of tasks are not considered. This last point is important when temporal sequences of tasks are used, for example when  assembling objects [\cite{IntroTpik28}; \cite{IntroTpik27}].
+
+Instead of a cascade of QP problems, another research [\cite{IntroTpik29}] proposed to solve a single problem finding the active set of all the constraints at the same time. Due to its iterative nature, the authors proposed to limit the number of iterations to achieve a boundary on the computation time, to be more suitable for a real-time implementation. But this solution is not optimal, and, again, activation/deactivation of equality tasks is not considered.
+
+Improvements are made in the already cited TRIDENT project [\cite{IntroTrident1}; \cite{IntroTrident4}], where field trials proved how to consider activation and deactivation of scalar tasks. But the solution still lacks the ability to deal with activation/deactivation of multidimensional tasks, i.e.\ multiple scalar tasks at the same priority level.
+
+%sunto di paper da cui ho copiato
+The goal reached by TRIDENT are improved in the MARIS project [\cite{IntroMaris0}; \cite{IntroTpik30}], where, among the others accomplishment, task transitions were successfully implemented in the framework. In particular [\cite{IntroMaris1}], possible discontinuities that can arise are eliminated by a task-oriented regularization and a singular value oriented regularization. Plus, the original simplicity of the task priority framework is retained thanks to pseudo-inverses.
+
+
+\subsection{The Peg-in-Hole Assembly Problem}
+The peg-in-hole is an essential task in assembly
+processes in various fields, such as manufacturing lines.
+
+This task can be performed following the classical position control method. But this is possible only if precise position of the hole is provided, and the position control error of the robot is zero.
+In practice, these conditions can only be obtained in specialized scenario. In the case of more versatile robots, such as industrial or underwater manipulators, 
+imprecisions and errors are unavoidable.
+
+To deal with these problems, classical works exploit two kind of instruments: cameras and sensors. 
+With camera(s), the robot can roughly recognize the objective (i.e.\ the hole) and inspect the overall process. Past researches [\cite{IntroPeg2}; \cite{IntroPeg1}] use this idea to extract boundaries of the object. Another one [\cite{IntroPeg3}] uses visual feedback for a micro-peg-in-hole task (hole of $100 \mu m$).
+
+Other approaches perform precise assembly of the parts thanks to force/torque sensors installed on the wrist. A study [\cite{IntroPeg4}] successfully accomplishes the assembly detecting the force of contact to compensate the positional uncertainty. Newman \textit{et al.} study [\cite{IntroPeg7}] shows how sensors can be used to build map of force and torque values of each contact point.  
+In another works [\cite{IntroPeg9}; \cite{IntroPeg8}], the location of the hole was estimated using the measured reaction moment occurred by the contact.
+Another good aspect of the sensors [\cite{IntroPeg6}; \cite{IntroPeg5}] is that they can guarantee stable contact through real-time contact force feedback.
+
+Other proposals [\cite{IntroPeg10}; \cite{IntroPeg11}] try to estimate the state of the contact using joint position sensor. This permits to not use the force/torque sensors on the wrist, which would need highly control frequency, and would increase overall cost and operation time. 
+Some researchers [\cite{IntroPeg12}] show that assembly task can be accomplished without contact force information and with inaccurate vision data. The proposed strategy  mimics the human behaviour: the peg was rubbed in a point close to the object until the relevant objects mated using compliant characteristics. The compliance allows the robot to softly adapt to the hole [\cite{IntroPeg13}; \cite{IntroPeg14}].
+A Similar, unexpensive, approach is tested experimentally [\cite{IntroPeg15}], without the use of force/torque sensors (i.e.\ no force feedback), nor Remote-center-compliance devices, and with inaccurate hole information.
+
+
+
+
+
+
+
+
+
+
+
+%%% A Task Priority Approach to Cooperative Mobile
+%%% Manipulation: Theory and Experiments
+%\subsection{Cooperative manipulators}
+%Cooperative robots indicates robots that \textit{cooperate} at some level to accomplish certain task. 
+%%This thesis focus on cooperative mobile manipulators: in general, two robots that carry a common load with their arms.\\
+%
+%First works on cooperative mobile manipulation [2,3] involved a mobile base dynamically coordinated with the arm using a potential function. The aim was maintaining the manipulator joint positions close to their midrange.\\
+%In another old work [4], a team of mobile robots push an object
+%cooperatively toward a desired position. Another works [5,6] follows this idea and focused on motion planning. It divides the problem in a global path planner and a local manipulation one.\\
+%In [10] a centralized robust adaptive controller is used. This was to guarantee that the motion and force trajectories of the constrained object converge to the desired manifolds.
+%However, the approach is limited to a 3 DOFs system and
+%neglects all the other control objectives of the system.\\
+%An important issue related to mobile manipulators is that disturbances of the mobile platform (such as imprecise wheel actuation, or underwater currents) would propagate through the coupled kinematics to the end-effector. This happen if the whole body Jacobian is employed to control the end-effector. A solution [12], similar to the previous cited one [2], consists in decouple the manipulator motion and the mobile platform motion kinematically in task space. The tests done on two dual-arm manipulators shown that disturbances are
+%efficiently compensated before propagating to end-effector
+%level. However, no other objectives are taken into account. Same authors investigates the model for the internal forces and dynamics interactions [13, 14].\\
+%
+%The control strategies are classified usually in two types: the centralized control paradigm and the decentralized 
+%control paradigm (Khatib, et al., 1996). In the centralized paradigm, there is a central controller which coordinates the 
+%robots (Chen and Li, 2006). This type of controller is relatively easy to be designed, but is difficult to be implemented because the great amount of numeric calculations and communication of dates to be transmitted to the robots. In the decentralized paradigm, each robot has an individual controller. which makes this type more practical, although communication between the controllers is typically necessary. The classical way is the leader-follower approach(Hirata, et al., 2003),
+%studied also for non-manipulator cooperative  transportations (i.e.\ robots without arm) [8, 7, 9].
+% 
+%Recent works in cooperative robotics include the already cited project in underwater robotics MARIS [\cite{IntroMaris2}; 18) but also aerial manipulators[20].
+
+
+
+ 
+
+
