@@ -2,6 +2,15 @@
 % SAMPLE BIBLIOGRAPHY FILE
 % ------------------------------------------------------------------------
 
+@misc{TWINBOT2019,
+	author = {TWINBOT},
+	title = {{Twinbot website}},
+	url = {http://www.irs.uji.es/twinbot/TWINBOT/Main.html},
+	urldate = {2019},
+	year = {2019}
+}
+
+
 @ARTICLE{AbstractTrident,
 	author={D. Ribas and P. Ridao and A. Turetta and C. Melchiorri and G. Palli and J. J. Fernández and P. J. Sanz},
 	journal={IEEE/ASME Transactions on Mechatronics},
@@ -1162,6 +1171,149 @@ journal = {IEEE Transactions on Industrial Electronics},
 doi = {10.1109/TIE.2017.2682002}
 
 }
+
+
+
+%%%%%%%%%%%%%%%%%  VISION REFS %%%%%%%%%%%%%%%%%%%%%%%
+@article{Shi94goodfeatures,
+
+author = {Shi, Jianbo and Tomasi, Carlo},
+
+year = {2000},
+
+month = {03},
+
+pages = {593–600},
+
+title = {Good Features to Track},
+
+volume = {600},
+
+journal = {Proceedings / CVPR, IEEE Computer Society Conference on Computer Vision and Pattern Recognition. IEEE Computer Society Conference on Computer Vision and Pattern Recognition},
+
+doi = {10.1109/CVPR.1994.323794}
+
+}
+
+@article{DudaHoughTrasf,
+	author = {Duda, Richard O. and Hart, Peter E.},
+	title = {Use of the Hough Transformation to Detect Lines and Curves in Pictures},
+	journal = {Commun. ACM},
+	issue_date = {Jan. 1972},
+	volume = {15},
+	number = {1},
+	month = jan,
+	year = {1972},
+	issn = {0001-0782},
+	pages = {11--15},
+	numpages = {5},
+	url = {http://doi.acm.org/10.1145/361237.361242},
+	doi = {10.1145/361237.361242},
+	acmid = {361242},
+	publisher = {ACM},
+	address = {New York, NY, USA},
+	keywords = {Hough transformation, colinear points, curve detection, line detection, pattern recognition, picture processing, point-line transformation},
+} 
+
+@ARTICLE{CannyEdge,
+	author={J. {Canny}},
+	journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+	title={A Computational Approach to Edge Detection},
+	year={1986},
+	volume={PAMI-8},
+	number={6},
+	pages={679-698},
+	keywords={Image edge detection;Detectors;Machine vision;Shape measurement;Performance analysis;Uncertainty;Gaussian approximation;Signal to noise ratio;Signal synthesis;Feature extraction;Edge detection;feature extraction;image processing;machine vision;multiscale image analysis},
+	doi={10.1109/TPAMI.1986.4767851},
+	ISSN={0162-8828},
+	month={Nov},}
+
+@article{houghprob,
+	title={Robust Detection of Lines Using the Progressive Probabilistic Hough Transform},
+	author={Jiri Matas and Charles Galambos and Josef Kittler},
+	journal={Computer Vision and Image Understanding},
+	year={2000},
+	volume={78},
+	pages={119-137}
+}
+
+@article{findcountors,
+	title = "Topological structural analysis of digitized binary images by border following",
+	journal = "Computer Vision, Graphics, and Image Processing",
+	volume = "30",
+	number = "1",
+	pages = "32 - 46",
+	year = "1985",
+	issn = "0734-189X",
+	doi = "https://doi.org/10.1016/0734-189X(85)90016-7",
+	url = "http://www.sciencedirect.com/science/article/pii/0734189X85900167",
+	author = "Satoshi Suzuki and Keiichi A. Be",
+}
+
+@InProceedings{surfDet,
+	author="Bay, Herbert
+	and Tuytelaars, Tinne
+	and Van Gool, Luc",
+	editor="Leonardis, Ale{\v{s}}
+	and Bischof, Horst
+	and Pinz, Axel",
+	title="SURF: Speeded Up Robust Features",
+	booktitle="Computer Vision -- ECCV 2006",
+	year="2006",
+	publisher="Springer Berlin Heidelberg",
+	address="Berlin, Heidelberg",
+	pages="404--417",
+	abstract="In this paper, we present a novel scale- and rotation-invariant interest point detector and descriptor, coined SURF (Speeded Up Robust Features). It approximates or even outperforms previously proposed schemes with respect to repeatability, distinctiveness, and robustness, yet can be computed and compared much faster.",
+	isbn="978-3-540-33833-8"
+}
+
+@Article{loweTest,
+	author="Lowe, David G.",
+	title="Distinctive Image Features from Scale-Invariant Keypoints",
+	journal="International Journal of Computer Vision",
+	year="2004",
+	month="Nov",
+	day="01",
+	volume="60",
+	number="2",
+	pages="91--110",
+	abstract="This paper presents a method for extracting distinctive invariant features from images that can be used to perform reliable matching between different views of an object or scene. The features are invariant to image scale and rotation, and are shown to provide robust matching across a substantial range of affine distortion, change in 3D viewpoint, addition of noise, and change in illumination. The features are highly distinctive, in the sense that a single feature can be correctly matched with high probability against a large database of features from many images. This paper also describes an approach to using these features for object recognition. The recognition proceeds by matching individual features to a database of features from known objects using a fast nearest-neighbor algorithm, followed by a Hough transform to identify clusters belonging to a single object, and finally performing verification through least-squares solution for consistent pose parameters. This approach to recognition can robustly identify objects among clutter and occlusion while achieving near real-time performance.",
+	issn="1573-1405",
+	doi="10.1023/B:VISI.0000029664.99615.94",
+	url="https://doi.org/10.1023/B:VISI.0000029664.99615.94"
+}
+
+@inproceedings{flannMatch,
+	author    = {Marius Muja and David G. Lowe},
+	title = {Fast Matching of Binary Features},
+	booktitle = {Computer and Robot Vision {(CRV)}},
+	year = {2012},
+	pages = {404-410}
+}
+
+@article{ransacHomog,
+	author = {Fischler, Martin A. and Bolles, Robert C.},
+	title = {Random Sample Consensus: A Paradigm for Model Fitting with Applications to Image Analysis and Automated Cartography},
+	journal = {Commun. ACM},
+	issue_date = {June 1981},
+	volume = {24},
+	number = {6},
+	month = jun,
+	year = {1981},
+	issn = {0001-0782},
+	pages = {381--395},
+	numpages = {15},
+	url = {http://doi.acm.org/10.1145/358669.358692},
+	doi = {10.1145/358669.358692},
+	acmid = {358692},
+	publisher = {ACM},
+	address = {New York, NY, USA},
+	keywords = {automated cartography, camera calibration, image matching, location determination, model fitting, scene analysis},
+} 
+
+
+
+
 
 
 

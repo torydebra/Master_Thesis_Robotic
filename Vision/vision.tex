@@ -1,0 +1,107 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+% THESIS CHAPTER
+
+
+\chapter{Vision}
+\label{chap:vision}
+\ifpdf
+    \graphicspath{{Vision/Figures/PNG/}{Vision/Figures/PDF/}{Vision/Figures/}}
+\else
+    \graphicspath{{Vision/Figures/EPS/}{Vision/Figures/}}
+\fi
+
+% short summary of the chapter
+\section*{Summary}
+
+%todo foto truzza del robot che guarda con le tre camere sotto
+
+Before the twin robots can approach the hole, its position must be know, at least roughly. In this chapter, the pose estimation of the hole is discussed.\\
+In the considered scenario, a third robot is present. Its duty is exclusively to \textit{detect} \& to \textit{track} the hole. In the simulation, another \href{https://cirs.udg.edu/auvs-technology/auvs/girona-500-auv/}{Girona 500 AUV} is used for this job, without the arm. Is evident that, in real scenario, a littler and more efficient robot should be used for the vision, see that no manipulation task are needed. In fact, in the original TWINBOT [\cite{TWINBOT2019}] simulation, a smaller \href{https://bluerobotics.com/product-category/rov/bluerov2/}{BlueROV} is present, as can be seen in (TODO) %todo ref figura original twinbot.
+However, in this case, another Girona 500 is used to not deal with another robot model.\\
+The \textit{vision} robot is equipped with two identical cameras which point in front of it. They are used as:
+\begin{itemize}
+	\item Two distinct cameras, independent one of the other.
+	\item As stereo cameras, thus exploiting stereo vision algorithms.
+	\item As RGB-D camera, i.e., a stereo vision couple where the left one is a RGB camera and the right one a Depth camera.  
+\end{itemize} 
+
+For the sake of simplicity, some assumptions are made:
+\begin{itemize}
+	\item Known \textit{intrinsic} camera parameters. These parameters are used by algorithms to take into account how the single camera see the scene. The (known) distortion is zero.
+	\item Known \textit{extrinsic} camera parameters, i.e. the position and orientation of cameras (respect the vehicle), and thus the relative pose (the transformation matrix) from one camera to the other (needed for stereo vision algorithm).
+	\item No external disturbances for the images, such as light reflections underwater or bad visibility.
+	\item Hole model known. This means that dimensions of the cuboid which contain the hole are known. Further explanation about this are given successively in (TODO) %todo linka sect tracking
+	\item A "friendly" cuboid hole. The front face is coloured and additional hole are present, as can be seen in (TODO) %todo linka figura truzza
+	. This help both the \textit{detection} phase and the \textit{tracking} phase.
+\end{itemize}
+About the robot, other assumption are:
+\begin{itemize}
+	\item the pose of the vehicle respect the inertial frame is known. (TODO?AS explained?? se si linka sez). This permits to know the hole pose estimation respect the inertial frame, to directly send the robot which are carrying the peg.
+	\item The initial position of the robot is such that it is facing the front face of the hole. It must be noticed that methods explained in the next sections can be adapted to relax this hypothesis. For example, the robot could turn around z-axis until the hole is detected. (TODO?? %todo maybe far vedere sti good result? )
+	 Also, good results are obtained when the robot not exactly face directly the cuboid, but, for example, it is on its side, looking at front face and a side one.
+	\item Once the robot has detected the hole and the pose sent to the twin robots, it must go away to not interfere with the insertion phase. This is done through keyboard (as a ROV) but it is not difficult to improve the code to let him go away autonomously. It must be noticed that, thanks to the \textit{tracking} algorithms, if the robot moves (because it is commanded to do so, or for water currents) the pose estimation is still good. 
+\end{itemize}
+
+The job is done into two phases: \textit{Detection} \ref{sec:visDetect}
+ and \textit{Tracking} \ref{sec:visTracking}
+
+%todo conclusion dicendo che si puo anche detectare il peg...
+
+\section{Detection}
+\label{sec:visDetect}
+
+\textit{Object Detection} means detect a particular shape (the \textit{object}) in the scene. This is important to initialize the tracking algorithm. In fact, to track an object, its initial pose (or at least some particular points of it) must be know. Thus, the detection part is the most difficult part.\\
+For the tracking algorithm used successively, the detection part must provide a correspondence between some points in the 2D image and some points in the 3D object shape. It is important to notice that the 3D coordinate needed refers to object frame, and not to an "external" frame. Seen that the object model is assumed to be know, the 3D coordinate of some point directly derive from this, so no other assumptions are made. So, in the experiment, a .init file looks like this:
+\begin{algorithm*}
+	4        \hspace{40px}      \# Number of points \\
+	          \hspace*{50px}        \#xyz with x going in, y on the right, z down. Unit measure is meter\\
+	0      -0.4     -0.4  ~ \# top right corner\\
+	0      0.4      -0.4  ~   \# top left\\
+	0      0.4     0.4   ~  \# bottom left\\
+	0      -0.4    0.4    ~ \# bottom right\\
+\end{algorithm*}\\
+Indicating the position on the 4 corners of the front face, respect to a frame positioned in the center of the hole, with x-axis going inside the hole, y lying along the surface pointing on the right, z pointing down to the seafloor.\\
+Four points is the minimum number of point accepted by the tracking algorithm. The more the point are, the more the tracking is good. Plus, point should lying on different surfaces of the object, to have better results. Anyway, good tracking result are obtained also not considering these two aspects.\\
+
+The work of Detection is to provide 2D coordinate as $(x,y)$ of these point in the 2D image captured by camera. This must be done for each camera, except for the Depth one, when used.\\
+Two method are used: \textit{Find Square Method} and \textit{Template Matching}. A third method, in which the 2D positions of the points are chosen by human operator, is used to have a benchmark of the other two and to analyse the tracking results when 2D Coordinates are almost perfect.\\
+Other methods and functions are briefly explained in Appendix \ref{chap:AppendixVision} 
+
+\subsection{Already known Coordinate Method}
+As explained, with this method the 2D coordinate are perfectly known. The code do this by letting the user to click on the 4 pixel which contains the corners. It is assumed that the user click on the best pixels which contain the corners. Given that the image is made by discrete pixels, is impossible to have an ideal point which is exactly the corner, but the errors for this are not noticeable.\\
+
+\subsection{Find Square Method}
+This method is taken from an OpenCV \href{https://docs.opencv.org/3.4/db/d00/samples_2cpp_2squares_8cpp-example.html}{tutorial}.\\
+Details of how each function works and explanation of the computer vision algorithm used are not provided here, to not go outside the scope of the thesis. Only a rough explanation of how the method works is presented:
+\begin{itemize}
+	\item This function looks in each image channel (unique if is a gray image, three if is a colored image) to find squares.
+	\item First, it pre-process the image to reduce noise.
+	\item Then, \href{https://docs.opencv.org/3.4.6/d3/dc0/group__imgproc__shape.html#ga17ed9f5d79ae97bd4c7cf18403e1689a}{\textit{findContours()}} is called to retrieves contours of the square with the algorithm described in \cite{findcountors}.
+	\item Each contour is approximated to be more like regular polygon, with lesser vertices and edges.
+	\item Finally, it look if the shapes are similar to squares/rectangles. This is done checking if the internal angles are almost 90 degree.
+	\item The returned squares are described by its four corners, that is what we are looking for. An additional function is called to be sure that the order of the returned corner is the same order of the point described in the .init file, otherwise correspondence are obviously erroneous.	
+\end{itemize}
+
+In the way it works, it should be noticeable that this algorithm give good results only if the camera approximately face the cuboid structure at the front. (TODO as can be see se ti metti di lato...). If the side face is more visible, it will be the one detected. So, we must know which side the robot is facing to give the 3D correspondence points in the .init file.\\
+In addition, this method is suitable if no other squares of similar dimension are present, otherwise further work is needed to discriminate them. Also, is not suitable with other kind of shapes (a pipe hole, for example).\\
+Given the described initial pose, TODO result are good.
+
+
+\subsection{Template Matching Method}
+Differently from the previous one, this method belong to a wider class of well-known method. \textit{Template Matching} means to find a pattern (in this case, the face of the hole) inside a scene. So, an additional image of the square face of the hole is needed.\\
+The code developed follow an OpenCV \href{https://docs.opencv.org/3.4.6/de/da9/tutorial_template_matching.html}{tutorial}. As the previous method, details on how template matching works go outside the scope of this thesis.\\
+In brief, template matching find the point in the scene which as more similarity (or less dissimilarity) with the provided template. This is done considering intensity values of the pixels in the neighbourhood area of a center pixel. In practice, the template is shifted all over the scene image and some calculation for each new template shifting are done. Various formula are provided by OpenCV and are detailed in the previous linked of the tutorial.\\
+It is important that the template is being scaled up and down, because usually its size is not equal to the size of the object in the scene. For each scaling, a best similarity point is detected. Then, all the similarity points are compared and the best one chosen.  At the end, a rectangle with the template dimension (scaled) is build considering this point as the center. The corners of the rectangle are the 4 point which we was looking for.\\
+
+TODO RESULT OF THISSSSSS
+
+This method is less robust than the previous for different initial position of the robot. If the face is view from a different angle, other template image is needed, with an orientation similar to what the robot is seeing. In general, lot of template images at different angles are needed. Also, building the shape around the centre point is more difficult, if this shape is not a square.
+
+
+
+
+
+\section{Tracking}
+\label{sec:visTracking}

@@ -12,7 +12,7 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{lettrine}
-
+\usepackage{subfig}
 % SPECIAL COMMANDS
 % correct bad hyphenation
 \hyphenation{op-tical net-works semi-conduc-tor}
@@ -91,11 +91,11 @@
 
 \mainmatter
 \include{Introduction/introduction}
-%\include{Chapter1/chapter1}
+\include{Vision/vision}
 %\include{Conclusions/conclusions}
 
 \appendix
-%\include{Appendix1/appendix1}
+\include{Vision/appendixVision}
 
 \bibliographystyle{Classes/RoboticsBiblio}    % bibliography style
 \renewcommand{\bibname}{References}           % change default name Bibliography to References
@@ -103,3 +103,9 @@
 \addcontentsline{toc}{chapter}{References}    % add References to contents page
 
 \end{document}
+
+
+
+
+%TODO Unmanned non vuol dire quello che pensi, rileggi state of art per refusi
+%TODO chiedi se devo linkare codice mio... tipo Detector di che è classe per i seguenti algo di visioni che sto per elencare
