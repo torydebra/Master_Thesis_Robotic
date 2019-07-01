@@ -13,6 +13,10 @@
 \usepackage{algorithmic}
 \usepackage{lettrine}
 \usepackage{subfig}
+\usepackage{csquotes}
+\usepackage[T1]{fontenc}
+\usepackage[bitstream-charter]{mathdesign}
+\usepackage[format=plain, font=it]{caption}
 % SPECIAL COMMANDS
 % correct bad hyphenation
 \hyphenation{op-tical net-works semi-conduc-tor}
@@ -22,12 +26,23 @@
 % declare commonly used operators
 \DeclareMathOperator*{\argmax}{argmax}
 
+%\newcounter{fileAlgorithm}[fileAlgorithm]
+\makeatletter
+\newenvironment{fileAlgorithm}[1][htb]{%
+	%\let\c@algorithm\c@fileAlgorithm %different counter for files
+	\renewcommand{\ALG@name}{File}% Update algorithm name
+	\begin{algorithm}[#1]%
+	}{\end{algorithm}}
+\makeatother
+%\renewcommand{\theHfileAlgorithm}{Supplement.\thefileAlgorithm}
+%\renewcommand{\theHalgorithm}{Supplement.\thealgorithm}
+
 % OPTIONS
 \hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue}
 
 % HEADER
 \ifpdf
-    \pdfinfo {/Title (Cooperative Assembly for Mobile Manipulators in an Underwater Mission Scenario)
+    \pdfinfo {/Title (Cooperative Assembly with Mobile Manipulators in an Underwater Mission Scenario)
               /Creator (TeX)
               /Producer (pdfTeX)
               /Author (Davide Torielli)
@@ -80,19 +95,21 @@
 \setcounter{tocdepth}{3}
 
 \frontmatter
-%\include{Acknowledgement/acknowledgement}
-%\include{Dedication/dedication}
-%\include{Abstract/abstract}
+\include{Dedication/dedication}
+\include{Acknowledgement/acknowledgement}
+\include{Abstract/abstract}
 
 \tableofcontents
-%\listoffigures
+\listoffigures
 %\printglossary  % Print the nomenclature (WAY TOO COMPLEX FOR ME NOW!)
 %\addcontentsline{toc}{chapter}{Nomenclature}
 
 \mainmatter
 \include{Introduction/introduction}
+\include{ControlFramework/controlFramework}
+\include{Method/method}
 \include{Vision/vision}
-%\include{Conclusions/conclusions}
+\include{Conclusions/conclusions}
 
 \appendix
 \include{Vision/appendixVision}

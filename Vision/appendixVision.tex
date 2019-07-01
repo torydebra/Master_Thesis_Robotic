@@ -1,7 +1,8 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%\textbf{}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %2345678901234567890123456789012345678901234567890123456789012345678901234567890
 %        1         2         3         4         5         6         7         8
 % THESIS CHAPTER
+
 
 \chapter{Other Algorithms for Object Detection}
 \label{chap:AppendixVision}
@@ -20,7 +21,7 @@ Each one is taken from \href{https://docs.opencv.org/3.4/d9/d97/tutorial_table_o
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=8.0cm]{goodFeatToTrack}
-	\caption{\textit{goodFeaturesToTrack()} result. Only two detected points are real corners, and the upper corners are not detected}
+	\caption[Result of \textit{goodFeaturesToTrack()}]{\textit{goodFeaturesToTrack()} result. Only two detected points are real corners, and the upper corners are not detected} 
 	\label{fig:goodFeatToTrack}
 \end{figure}
 
@@ -47,7 +48,7 @@ This method should be used as a low level algorithm, to then help higher level o
 		\includegraphics[width=5.0cm]{canny_HoughStandard}
 		\qquad
 		\includegraphics[width=5.0cm]{canny_HoughProb}
-	\caption{Result of Hough Standard Transform (left) and Probabilistic (right). In white all the edges detected with Canny, in red the detected straight lines}
+	\caption[Result of Standard Hough Transform and Probabilistic one]{Result of Hough Standard Transform (left) and Probabilistic (right). In white all the edges detected with Canny, in red the detected straight lines}
 	\label{fig:HoughStandard}
 \end{figure}
 
@@ -63,8 +64,17 @@ Thus, this method can be used as good starting point to further process the imag
 	\includegraphics[width=5.0cm]{BoundBox_sourceOnlyPolig}
 	\qquad
 	\includegraphics[width=5.0cm]{BoundBox_resultOnlyPolig}
-	\caption{Result of the algorithm: on the left the original image, on the right the contours detected}
+	\caption[Result of bounding box detection]{Result of the algorithm: on the left the original image, on the right the contours detected}
 	\label{fig:BoundBoxresultOnlyPolig}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=5.0cm]{BoundBox_SourceOnlyRect}
+	\qquad
+	\includegraphics[width=5.0cm]{BoundBox_resultOnlyRect}
+	\caption[Another result of bounding box detection]{On the left, the original image. On the right, the drawn bounding boxes around the holes.}
+	\label{fig:BoundBoxresultOnlyRect}
 \end{figure}
 
 In this method, shape contours are found and then bounding boxes drawn. As explained in the previous section, finding shape contours can be a starting point to initialize higher level image processing, such as the tracking.\\
@@ -73,20 +83,24 @@ First, a Canny edge detector is used to preprocess the image. Then, the function
 In case of the square hole structure (already almost a "bounding box" of itself), finding the boxes is useful to reduce the noise, and to have a square/rectangle with straight lines.\\
 The result without the bounding boxes are shown in \ref{fig:BoundBoxresultOnlyPolig}. The square is noticeable, but also other not interesting lines are shown. 
 For this specific purpose (detection of square face of hole), the detection is worse than the algorithm of section \ref{sec:HoughTrasf} which used probabilistic hough transform.\\
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=5.0cm]{BoundBox_SourceOnlyRect}
-	\qquad
-	\includegraphics[width=5.0cm]{BoundBox_resultOnlyRect}
-	\caption{On the left, the original image. On the right, the drawn bounding boxes around the holes}
-	\label{fig:BoundBoxresultOnlyRect}
-\end{figure}
-The thing to notice is that the holes on the surface are well visible. This may be useful for other algorithms, or to detect other kind of shapes like a tube hole (a pipe). Results in \ref{fig:BoundBoxresultOnlyRect} show bounding boxes around the holes. However, it is difficult to have a precise pose estimation with bounding boxes.\\
+The thing to notice is that the holes on the surface are well visible. This may be useful for other algorithms, or to detect other kind of shapes like a tube hole (a pipe).\\
+Results in \ref{fig:BoundBoxresultOnlyRect} show bounding boxes around the holes. However, it is difficult to have a precise pose estimation with bounding boxes.\\
 In conclusion, this is a good method that can be explored.
 However, lot of non interesting edge are detected, so parameters have to be chosen wisely.
 
+
 \section{2D Feature Matching \& Homography}
 %https://docs.opencv.org/3.4/d7/dff/tutorial_feature_homography.html
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=3.8cm]{new_featHomog_SURF_templKeyPoint}\\
+	\vspace{15px}
+	\includegraphics[width=6.2cm]{new_featHomog_SURF_cameraKeyPoint}
+	\qquad
+	\includegraphics[width=7cm]{new_featHomog_SURF_result}
+	\caption[Result of 2D Feature Matching]{Result of the algorithm. Above, the detected features (in blue) in the \textit{object image}. Below, on the left, the detected features in the \textit{scene image}; on the right the matched (erroneous) features.}
+	\label{fig:featHomog}
+\end{figure}
 
 \textit{Image features} are small patches that are useful to compute similarities between images. Please note that these features are different from corner points.
 They indicates particular details that are different from others. Detecting these areas is important to recognize objects of interest in the image. The \textit{descriptors} of these features contain the visual description of the patches, and they are used to recognize similarities.\\
@@ -101,20 +115,13 @@ The OpenCV \href{https://docs.opencv.org/3.4/d7/dff/tutorial_feature_homography.
 	\item \textbf{Lowe's ratio test} [\cite{loweTest}]to filter the best matches.
 	\item \textbf{RANSAC} (RANdom SAmple Consensus) [\cite{ransacHomog}] method to find the homography with the function \href{https://docs.opencv.org/3.4/d9/d0c/group__calib3d.html#ga4abc2ece9fab9398f2e560d53c8c9780}{\textit{findHomography()}}.
 \end{itemize}
-\begin{figure}
-	\centering
-	\includegraphics[width=3.8cm]{new_featHomog_SURF_templKeyPoint}\\
-	\vspace{15px}
-	\includegraphics[width=6.2cm]{new_featHomog_SURF_cameraKeyPoint}
-	\qquad
-	\includegraphics[width=7cm]{new_featHomog_SURF_result}
-	\caption{Result of the algorithm. Above, the detected features (in blue) in the \textit{object image}. Below, on the left, the detected features in the \textit{scene image}; on the right the matched (erroneous) features.}
-	\label{fig:featHomog}
-\end{figure}
 
 In this case, results are unsatisfactory as can be seen in \ref{fig:featHomog}. The main problem is that in this particular scene there are not nice distinct features. Also, the symmetry of the structure does not help, because there are a lot of particulars that are the same (like the square side and the holes). As can be seen in the \href{https://docs.opencv.org/3.4/d7/dff/tutorial_feature_homography.html}{tutorial}, good results are obtained for food boxes. In fact, this methods is often associate to scenes where a lot of details are present (graffiti painting, supermarket shelf, ...). In our underwater case, realistic infrastructures don't have this details.\\
 There are also lot of parameters to set for the three main tools (SURF, FLANN, RANSAC). Various trials have been tried but no-one was satisfactory. Also, different detectors (like SWIFT [\cite{loweTest}]) and matchers (like Brute-force), have been tried.\\
 The variety of tools and parameters make this method suitable for a lot of applications, and must be taken into consideration in other applications.
+
+
+
 
 
 
