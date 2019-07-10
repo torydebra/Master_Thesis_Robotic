@@ -100,7 +100,7 @@ Let us define the following \textit{activation function}:
 	a(x) \in [0,1]
 \end{equation}
 as a continuous, sigmoidal, function, which assumes $0$ value outside the validity region of the control objective, and $1$ inside it. In between, a smooth transition is present, to gently activate/deactivate the control objective. \\
-For example, considering a scalar ($ p = 1 $) inequality control objective with the requirement $x(\boldsymbol{c} > x_{min}$ the \textit{activation function} is defined as:
+For example, considering a scalar ($ p = 1 $) inequality control objective with the requirement $x(\boldsymbol{c}) > x_{min}$ the \textit{activation function} is defined as:
 \begin{equation}
 	\label{eq_activation_f}
 	a(x) \triangleq
@@ -286,7 +286,7 @@ The algorithm, schematized in fig. \ref{fig:coopScheme} proceeds as follows:
 In this described method, the only information that the agent must exchange are the
 \textit{non-cooperative} velocities $\boldsymbol{\dot{x}}_{t,a}, \boldsymbol{\dot{x}}_{t,b}$, the feasible ones $\boldsymbol{\dot{\tilde{x}}}$, and the constrain matrix $\boldsymbol{C}$. Furthermore, even less data can be exchanged if the \textit{coordinator} is a procedure which runs on a robot, and it is not on an external node. 
 
-\section{Force-Torque Considerations}
+\section{Force-Torque Propagation}
 \label{sec:forceConsideration}
 When a robot interacts with the environment, each contact generates forces on them. Mission like an assembly task can't be studied in a properly manner without some considerations about these forces. In a peg-in-hole Mission, contact between the peg and the hole will be transferred through the whole kinematic chain until the floating base, causing disturbance to the whole robotic system.\\
 Let us define $\boldsymbol{f} \in \mathbb{R}^3$ and $\boldsymbol{m} \in \mathbb{R}^3$ as:
@@ -294,22 +294,30 @@ Let us define $\boldsymbol{f} \in \mathbb{R}^3$ and $\boldsymbol{m} \in \mathbb{
 	\boldsymbol{f} = \begin{bmatrix}f_x \\ f_y \\ f_z\end{bmatrix} \qquad
 	\boldsymbol{m} = \begin{bmatrix}m_x \\ m_y \\ m_z\end{bmatrix}
 \end{equation}
-being the $\boldsymbol{f}$ and $\boldsymbol{m}$ the resultant forces and torques (projected on the tool frame $ \langle t \rangle $) of all the forces and torques acting on the tool. These disturbances generate joint velocities $ \delta \dot{q} \in \mathbb{R}^l$ [\cite{bookSiciliano}]:
+being the $\boldsymbol{f}$ and $\boldsymbol{m}$ the resultant forces and torques (projected on the tool frame $ \langle t \rangle $) of all the forces and torques acting on the tool. These disturbances generate joint velocities $ \boldsymbol{\dot{q}}_{\delta} \in \mathbb{R}^l$ [\cite{bookSiciliano}]:
 \begin{equation}
 \label{eq:forTor}
-	\delta \dot{q} = \;(^{lin}\boldsymbol{J}_t)^T \boldsymbol{f} + \;(^{ang}\boldsymbol{J}_t)^T \boldsymbol{m}
+	\boldsymbol{\dot{q}}_{\delta} = k \, (\;(^{lin}\boldsymbol{J}_t)^T \boldsymbol{f} + \;(^{ang}\boldsymbol{J}_t)^T \boldsymbol{m}) \quad 0 < k < 1 
 \end{equation}
-where $lin$ and $ang$ stand for \textit{linear} and \textit{angular} part of the Jacobian described in \ref{sec:tpik}; respectively the top-left $3\times 3$ and the bottom-right $3\times 3$ submatrices.\\
+where $lin$ and $ang$ stand for \textit{linear} and \textit{angular} part of the Jacobian described in section \ref{sec:tpik}; respectively the top-left $3\times 3$ and the bottom-right $3\times 3$ submatrices. $k$ is a gain smaller than $1$ to not generate too high joints velocities\\
+%todo verifica se è giusto sta cosa seguente.
+
+Same considerations can be done for effects of collisions on the vehicle. Again, we can find a disturbance velocity vector, this time for the floating base. The formula is the same, the only difference is that this time the Jacobian is the matrix which express the relationship between vehicle velocities (linear and angular) and end-effector velocities.
 \vspace*{50px}\\
+
+
 %todo questa è parte metodi pratici
 When the peg is inside the hole, but not aligned perfectly, contact between the external surface of peg and the internal side of the hole may happen, while the robot is inserting it. This can be the case when the estimation of the hole pose is not perfect and the peg is driven not exactly at the centre of the hole.
-The resultant forces and torques, transferred to the whole arm with equation \eqref{eq:forTor}, will naturally driven the peg to be aligned correctly. However, if these forces and torques are not considered by the control architecture, it would cause a persevering chattering because the task will persist in the erroneous direction.\\ %todo metti plot per mostrare cio?
-A possible solution is to insert a new objective into the TPIK procedure. The aim of this objective is to zeroing the forces and torques acting on the peg, generating properly joint commands\\ 
+The resultant forces and torques, transferred to the whole arm with equation \eqref{eq:forTor} (and to the vehicle with a similar formula), will naturally driven the peg to be aligned correctly. However, if these forces and torques are not considered by the control architecture, it would cause a persevering chattering because the task will persist in the erroneous direction.\\ %todo metti plot per mostrare cio?
 %todo ma chattering ce lo stesso perche quando le forze sono azzerate poi il reach gol di nuovo fa picchiare sulle pareti...
+
+
+\section{Force-Torque Task}
+Information from a force torque sensor can be exploited at kinematic level, inserting an additional control objective into the TPIK procedure. The aim of this objective is to zeroing the forces and torques acting on the peg, generating properly joint commands\\ 
 %todo another assunza che effeti sul vehicle sono negleted...
 The \textit{feedback reference rate} for it will be:
 \begin{equation}
-	\begin{bmatrix}{\dot{\bar{x}}}_f \\ {\dot{\bar{x}}}_m \end{bmatrix} \triangleq 
+	\boldsymbol{\dot{\bar{x}}}_{ft} \triangleq \begin{bmatrix}{\dot{\bar{x}}}_f \\ {\dot{\bar{x}}}_m \end{bmatrix} \triangleq 
 	\begin{bmatrix} \gamma_f \\ \gamma_m \end{bmatrix} 
 	\begin{bmatrix}
     0 - \| \boldsymbol{f} \| \\ 0 -\| \boldsymbol{m} \|
@@ -319,14 +327,42 @@ where $\| \boldsymbol{f} \|$ and $\| \boldsymbol{m} \|$ are the norms of the for
 The norms $f$ and $m$ are used instead the full 3-dimensional vectors $\boldsymbol{f}$ and $\boldsymbol{m}$. This is done to not overconstrain the system and let more freedom to lower priority task. Even with norms, the control objective is obviously satisfied.\\
 The \textit{feedback reference rate} is intended to be like additional velocity that the tool must follow. Thus, the Jacobian of this new task will be equal to the $\boldsymbol{J}_t$ introduced in \ref{sec:tpik}. The difference is that we have to divide linear and angular part, and pre-multiplying it for the normal vector of $\boldsymbol{f}$ and $\boldsymbol{m}$:
 \begin{equation}
-	\begin{bmatrix}{\boldsymbol{J}}_f \\[2em] {\boldsymbol{J}}_m \end{bmatrix} \triangleq 
-	\begin{bmatrix} \dfrac{\boldsymbol{f}}{\| \boldsymbol{f} \|} \enspace ^{lin}\boldsymbol{J}_t  \\[1.5em]
-	\dfrac{\boldsymbol{m}}{\| \boldsymbol{m} \|} \enspace ^{ang}\boldsymbol{J}_t  \end{bmatrix} 
+	\boldsymbol{J}_{ft} \triangleq \begin{bmatrix}{\boldsymbol{J}}_f \\[2em] {\boldsymbol{J}}_m \end{bmatrix} \triangleq 
+	\begin{bmatrix} \left( \dfrac{\boldsymbol{f}}{\| \boldsymbol{f} \|}\right)^T \enspace ^{lin}\boldsymbol{J}_t  \\[1.5em]
+	\left( \dfrac{\boldsymbol{m}}{\| \boldsymbol{m} \|}\right) ^T \enspace ^{ang}\boldsymbol{J}_t  \end{bmatrix} 
 \end{equation}
-with both $\boldsymbol{J}_f, \boldsymbol{J}_m \in \mathbb{R}^{1\times l}$
 
-\vspace{30px}
-%Same consideration can be done for the torques, and a generic control objective comprehensive of both can be constructed stacking accordingly the vectors and the matrices.
+with both $\boldsymbol{J}_f, \boldsymbol{J}_m \in \mathbb{R}^{1\times l}$.\\
+This objective can be considered as a \textit{pre-requisite} one (section \ref{sec:coClass}). So, it is put at higher priority than the reaching goal objective. This will cause that, if forces are detecting, the robot first try to nullified them, and only after (i.e. \textit{if possible}) move the peg towards the goal.\\
+Deactivating it is necessary when the forces and/or torques are zero. So a smooth activation function (section \ref{sec:activations}), $\boldsymbol{A} \in \mathbb{R}^{2 \times 2}$ is used:
+\begin{equation}
+	\begin{gathered}
+		\boldsymbol{A}_{ft} \triangleq
+		\begin{bmatrix}
+			a_f & 0 \\
+			0 & a_t \\
+		\end{bmatrix} \\
+		%	
+		\vspace{10px}
+		a_f(\| \boldsymbol{f}\|) \triangleq
+		\begin{cases}
+			0,& \| \boldsymbol{f}\| = 0\\
+			s(\| \boldsymbol{f}\|), & 0 < \| \boldsymbol{f}\| \leq 0 + \Delta\\
+			1, & \| \boldsymbol{f}\| > 0 + \Delta\\
+		\end{cases} \\
+		%		
+		\vspace{10px}
+		a_m(\| \boldsymbol{m}\|) \triangleq
+		\begin{cases}
+			0,& \| \boldsymbol{m}\| = 0\\
+			s(\| \boldsymbol{m}\|), & 0 < \| \boldsymbol{m}\| \leq 0 + \Delta\\
+			1, & \| \boldsymbol{m}\| > 0 + \Delta\\
+		\end{cases}
+	\end{gathered}
+\end{equation}  
+where $s(\cdot)$ is a smooth \textit{increasing} function from 0 to 1, and $\Delta$ a constant to create the smooth zone.
+
+
 
 
 

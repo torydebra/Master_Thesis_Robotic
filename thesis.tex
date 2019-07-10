@@ -16,7 +16,8 @@
 \usepackage{csquotes}
 \usepackage[T1]{fontenc}
 \usepackage[bitstream-charter]{mathdesign}
-\usepackage[format=plain, font=it]{caption}
+\usepackage{graphicx,kantlipsum,setspace}
+\usepackage[format=plain, font={it, stretch=1}]{caption}
 % SPECIAL COMMANDS
 % correct bad hyphenation
 \hyphenation{op-tical net-works semi-conduc-tor}
@@ -49,12 +50,12 @@
               /CreationDate (D:20190110182500) %format D:YYYYMMDDhhmmss
               /ModDate (20190110182500)
               /Subject (Cooperative Assembly for Mobile Manipulators in an Underwater Mission Scenario)
-              /Keywords (Thesis, Underwater, TPIK, Mobile Manipulators, Cooperative manipulators, cooperative assembly, AUV, UVMS, Peg-in-hole)}
+              /Keywords (Thesis, Underwater robotics, marine robotics, kinematic control, TPIK, Mobile Manipulators, Cooperative manipulators, cooperative assembly, AUV, UVMS, ROV, Peg-in-hole, force-torque, stereovision)}
     \pdfcatalog {/PageMode (/UseOutlines)
                  /OpenAction (fitbh) }
 \fi
 
-\title{Cooperative Assembly for Mobile Manipulators in an Underwater Mission Scenario}
+\title{Cooperative Assembly with Mobile Manipulators in an Underwater Mission Scenario}
 
 \ifpdf
   \author{\href{mailto:toridebraus@gmail.com}{Davide Torielli}}
@@ -112,6 +113,7 @@
 \include{Conclusions/conclusions}
 
 \appendix
+\include{Appendix/appendixCode}
 \include{Vision/appendixVision}
 
 \bibliographystyle{Classes/RoboticsBiblio}    % bibliography style
