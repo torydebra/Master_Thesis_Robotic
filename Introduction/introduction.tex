@@ -16,12 +16,7 @@
 Nowadays, different kinds of robot are largely used for underwater missions. A particular type of submarine robot is the Underwater Vehicle Manipulator System (UVMS): an autonomous underwater vehicle (AUV) capable of accomplishing tasks that require a certain level of dexterity, thanks to single or multiple arms.\\
 A really innovative field for underwater missions is the analysis of cooperation between multiple agents, which permits to extend their flexibility. Cooperative robots are two or more robots, identical or different, that coordinate themselves autonomously (i.e.\ without human intervention) to accomplish various objectives, from mapping an area to assembling an object.   
 
-This thesis focuses on a totally unexplored environment: cooperative \textit{peg-in-hole} assembly with underwater manipulators. It is part of the TWINBOT project [\cite{TWINBOT2019}], which is devoted to make a step forward to missions in complex scenarios. Effort is devoted to extend the capability of robots to be able to solve strategic missions. Cooperation is the key in this scenario. Cooperative agents augment the capability of the single, for example to carry an heavy object.\\
-
-At the time this thesis is developed, the TWINBOT project was in an early stage. So, this works evolves autonomously, always keeping an eye on the main objective of the project: improve capabilities of cooperative underwater intervention robots.
-So, particular focus will be posed on the cooperation between the two robots. Specifically, this thesis develops a control architecture for the kinematic level. It adopt inverse kinematic algorithms based on task's priority (TPIK), where the peg-in-hole mission is included.\\
-For the detection and pose estimation of the hole, computer vision algorithm are exploited. In particular, stereo-vision methods are implemented, using the cameras of a third robot, who acts exclusively for the vision part.\\ 
-This pose is only an estimation: to correctly insert the peg into the hole during the final phase, a force-torque sensor is used and information provided by it shared between the two agents.\\
+This thesis focuses on a totally unexplored environment: cooperative \textit{peg-in-hole} assembly with underwater manipulators. It is part of the TWINBOT project [\cite{TWINBOT2019}], which is devoted to make a step forward to missions in complex scenarios. Effort is devoted to extend the capability of robots to be able to solve strategic missions.
 
 Part of this thesis is developed at \href{http://www.irs.uji.es/}{IRSLab} at Universitad Jaume I, Castell\`{o}n de la Plana, Spain, during the time I spent as an Erasmus+ 2018/19 student, under the supervision of Professor Pedro J. Sanz and Professor Ra\'{u}l Mar\'{i}n Prades. The IRSLab is the coordinator of the cited TWINBOT project. \\
 Another part of the work is done at \href{http://www.graal.dibris.unige.it/}{GRAAL} at Universit\`{a} degli Studi di Genova, Italy, under the supervision of Professor Giuseppe Casalino and Professor Enrico Simetti.\\
@@ -29,7 +24,8 @@ Another part of the work is done at \href{http://www.graal.dibris.unige.it/}{GRA
 The architecture is implemented in C++ and the code is avaible on GitHub at the following link:  \href{https://github.com/torydebra/AUV-Coop-Assembly}{https://github.com/torydebra/AUV-Coop-Assembly}.\\
 
 %todo controlla sta strucure
-This thesis is structured as follows. Chapter \ref{chap:introduction} introduces the problem, recaps the previous work in this field, and states objectives of the work. Chapter \ref{chap:control} defines the theory behind the work. Chapter \ref{} applies the theory explained to the actual problem, and analyses the results. Chapter \ref{chap:vision} focuses on the vision part, explaining methods and discussing results. In Chapter \ref{chap:conclusions}, conclusions are given.
+TODO\\
+This thesis is structured as follows. Chapter \ref{chap:introduction} introduces the problem, recaps the previous work in this field, and states objectives of the work. Chapter \ref{chap:control} defines the theory behind the work. Chapter \ref{chap:method} applies the theory explained to the actual problem. In Chapter \ref{chap:results} the simulation set-up is described and results are discussed. Chapter \ref{chap:vision} focuses on the vision part, explaining methods and discussing results. In Chapter \ref{chap:conclusions}, conclusions are given.
 
 \section{State of the Art}
 \label{sec:stateArt}
@@ -118,6 +114,7 @@ The goal reached by TRIDENT are improved in the MARIS project [\cite{IntroMaris0
 
 
 \subsection{The Peg-in-Hole Assembly Problem}
+\label{sec:artPeg}
 The peg-in-hole is an essential task in assembly processes in various fields, such as manufacturing lines.
 
 This task can be performed following the classical position control method. But this is possible only if precise position of the hole is provided, and the position control error of the robot is zero.
@@ -140,18 +137,13 @@ A Similar, unexpensive, approach is tested experimentally [\cite{IntroPeg15}], w
 
 \section{Motivation and Rationale}
 Sea plays an important role in our societies. Many examples are given in the previous section \ref{sec:stateArt}. When such kind of environment are so important, robotic usage and exploitation is necessary at different level.\\
-This thesis to improve the current state of art in autonomy of underwater vehicles. Effort in this direction bring the robots to be capable of doing always more complicated task, substituting gradually the remotely operated version of them. The peg-in-hole is an example of these complicated task. In general, robotic assembly problems have been addressed and explored widely, but, to the best of this author's knowledge, no works have been done for cooperatively assembly in underwater scenarios, except for the TWINBOT project [\cite{TWINBOT2019}], which this thesis is part of. Productions related to this problem can help to improve this actual lack and make the technologies to advance.\\
+This thesis aim to improve the current state of art in autonomy of underwater vehicles. Efforts in this direction can help the robots doing always more complicated tasks, substituting gradually the remotely operated version of them. The peg-in-hole is one example of these complicated tasks. In general, robotic assembly problems have been addressed and explored widely, but, to the best of this author's knowledge, no works have been done for cooperatively assembly in underwater scenarios, except for the TWINBOT project [\cite{TWINBOT2019}], which this thesis is part of. Productions related to this problem can help to improve this actual lack and make the technology to advance. Cooperative agents augment the capability of the single, for example to carry an heavy object. It is important to notice that cooperation here is intended at \textit{kinematic level}. So, for example, it is not intended to deal with swarms of robots. In this case, cooperation means two (or, in general, more than two) robots that share (in some way) their commanded system velocities (the usual output of the kinematic layer) to move together without, in this case, make the common tool fall or break. There is not \enquote{high level} reasoning with a planner, but only mathematical formulas to make the robot \textit{cooperate}. Such improvements at kinematic level are important because reduce the effort at high level (i.e. the planner) that, in general, is always necessary but with this kind of method can be less complicated.\\
 
-The aim of this thesis is to developed a kinematical control framework suitable for the discussed scenario. Task Priority Inverse Kinematic is exploited for the control of the single agent, for the cooperation part, and to exploit the information given by vision and force-torque sensor. 
-
-\section{Outline?}
-The proposed architecture is tested in a simulated environment. The simulator used is UWSim
-
-
-
-
-
-
+At the time this thesis was being developed, the TWINBOT project was in an early stage. So, this works evolves autonomously, always keeping an eye on the main objective of the project: improve capabilities of cooperative underwater intervention robots.\\
+The aim  is to developed a kinematic control framework suitable for the underwater \textit{peg-in-hole} scenario. Task Priority Inverse Kinematic is exploited for the control of the single agent, for the cooperation part, and to exploit the information given by cameras and a force-torque sensor.\\
+For the detection and pose estimation of the hole, computer vision algorithm are exploited. In particular, stereo-vision methods are implemented, using the cameras of a third robot, who acts exclusively for the vision part.\\ 
+This pose is only an estimation: to correctly insert the peg into the hole during the final phase, a force-torque sensor is used and information provided by it shared between the two agents.\\
+ 
 
 %todo vedi se inserire sta cosa come altra subsec di state of art
 %%% A Task Priority Approach to Cooperative Mobile

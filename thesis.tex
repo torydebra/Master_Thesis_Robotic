@@ -18,6 +18,8 @@
 \usepackage[bitstream-charter]{mathdesign}
 \usepackage{graphicx,kantlipsum,setspace}
 \usepackage[format=plain, font={it, stretch=1}]{caption}
+\usepackage{graphicx}
+\usepackage[table,xcdraw]{xcolor}
 % SPECIAL COMMANDS
 % correct bad hyphenation
 \hyphenation{op-tical net-works semi-conduc-tor}
@@ -43,7 +45,7 @@
 
 % HEADER
 \ifpdf
-    \pdfinfo {/Title (Cooperative Assembly with Mobile Manipulators in an Underwater Mission Scenario)
+    \pdfinfo {/Title (Cooperative Assembly with Autonomous Mobile Manipulators in an Underwater Scenario)
               /Creator (TeX)
               /Producer (pdfTeX)
               /Author (Davide Torielli)
@@ -55,7 +57,7 @@
                  /OpenAction (fitbh) }
 \fi
 
-\title{Cooperative Assembly with Mobile Manipulators in an Underwater Mission Scenario}
+\title{Cooperative Assembly with Autonomous Mobile Manipulators in an Underwater Scenario}
 
 \ifpdf
   \author{\href{mailto:toridebraus@gmail.com}{Davide Torielli}}
@@ -109,6 +111,7 @@
 \include{Introduction/introduction}
 \include{ControlFramework/controlFramework}
 \include{Method/method}
+\include{Results/results}
 \include{Vision/vision}
 \include{Conclusions/conclusions}
 
