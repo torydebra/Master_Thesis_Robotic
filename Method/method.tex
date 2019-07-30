@@ -37,8 +37,8 @@ It can be noticed that, instead the full 3-dimensional vectors $\boldsymbol{f}$ 
 The \textit{feedback reference rate} of equation \eqref{eq:refForceTask} is intended to be like a velocity that the tool must follow. So, the Jacobian must be built considering this thing. For the \textit{task-induced} Jacobian (section \ref{sec:tpik}) of this new task, we have to take the linear and the angular part, and pre-multiplying them for the normal vector of $\boldsymbol{f}$ and $\boldsymbol{m}$ transposed:
 \begin{equation}
 	\boldsymbol{J}_{ft} \triangleq \begin{bmatrix}{\boldsymbol{J}}_f \\[1em] {\boldsymbol{J}}_m \end{bmatrix} \triangleq 
-	\begin{bmatrix} \left( \dfrac{\boldsymbol{f}}{\| \boldsymbol{f} \|}\right)^T \enspace ^{lin}\boldsymbol{J}_t  \\[1.5em]
-		\left( \dfrac{\boldsymbol{m}}{\| \boldsymbol{m} \|}\right) ^T \enspace ^{ang}\boldsymbol{J}_t  \end{bmatrix} 
+	\begin{bmatrix} \left( - \; \dfrac{\boldsymbol{f}}{\| \boldsymbol{f} \|}\right)^T \enspace ^{lin}\boldsymbol{J}_t  \\[1.5em]
+		\left( - \; \dfrac{\boldsymbol{m}}{\| \boldsymbol{m} \|}\right) ^T \enspace ^{ang}\boldsymbol{J}_t  \end{bmatrix} 
 \end{equation}
 where $\boldsymbol{J}_f, \boldsymbol{J}_m \in \mathbb{R}^{1\times l}$; $J_t$ is the Jacobian which express how Cartesian velocity $\dot{\boldsymbol{x}}_t$ of the tool are affected by the system velocity vector  $\dot{\boldsymbol{y}}$; $lin, ang$ superscripts refer to \textit{linear} (top three rows) and \textit{angular} (bottom three rows) parts of $J_t$.\\
 
@@ -96,7 +96,7 @@ The TPIK procedure is run two more times, one for the vehicle-arm coordination (
 Please note that some important objectives related to safe transportation (e.g. obstacle avoidance, minimum altitude from seafloor, minimum distance between robots), grasping (e.g. camera centring object) are not considered because they are not necessary in the particular experiment chosen, and also because they are explored in other works [\cite{IntroMaris2}; \cite{IntroRecent}].\\
 
 
-\section{Changing the Goal Frame}
+\section{The Change Goal Frame routine}
 \label{sec:changeGoal}
 In general, the frame where the tool is dragged by the control architecture (the \textit{goal} frame) is known with some errors. This is the case when, for example, we have some computer vision algorithm to estimate the hole pose. 
 This error between ideal goal and estimated one, along linear and angular component, can cause the peg to collide more with the hole. If the peg clashes against the hole structure face (i.e. outside the proper hole) it is pushed back and a stuck may happen. In the literature, various methods (cited in \ref{sec:artPeg}) have been explored to deal with this problem.\\

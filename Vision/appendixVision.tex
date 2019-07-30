@@ -12,8 +12,7 @@
     \graphicspath{{Vision/Figures/EPS/}{Vision/Figures/}}
 \fi
 
-During the simulations, several trials have been done to find a suitable algorithm for the detection of the hole structure. In section (TODO) %todo ref sect
-two methods have been discussed as the successful ones. In this appendix, others are briefly explained and discussed. Even if they are not used in the last versions of experiments, they can be useful for other purposes, such as detection of other kind of shapes. They can also be useful when the scene is different, for example while taking the hole structure from its side.\\
+During the simulations, several trials have been done to find a suitable algorithm for the detection of the hole structure. In Chapter \ref{chap:vision} two methods have been discussed as the successful ones. In this appendix, others are briefly explained and discussed. Even if they are not used in the last versions of experiments, they can be useful for other purposes, such as detection of other kind of shapes. They can also be useful when the scene is different, for example while taking the hole structure from its side.\\
 Each one is taken from \href{https://docs.opencv.org/3.4/d9/d97/tutorial_table_of_content_features2d.html}{OpenCV Detection tutorials}, where also other algorithms can be found.
 
 \section{Corner Detection with the Shi-Harris method}
@@ -21,7 +20,7 @@ Each one is taken from \href{https://docs.opencv.org/3.4/d9/d97/tutorial_table_o
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=8.0cm]{goodFeatToTrack}
-	\caption[Result of \textit{goodFeaturesToTrack()}]{\textit{goodFeaturesToTrack()} result. Only two detected points are real corners, and the upper corners are not detected} 
+	\caption[Result of \textit{goodFeaturesToTrack()}]{\textit{goodFeaturesToTrack()} result. Only two detected points are real corners, and the upper corners are not detected.} 
 	\label{fig:goodFeatToTrack}
 \end{figure}
 
@@ -48,7 +47,7 @@ This method should be used as a low level algorithm, to then help higher level o
 		\includegraphics[width=5.0cm]{canny_HoughStandard}
 		\qquad
 		\includegraphics[width=5.0cm]{canny_HoughProb}
-	\caption[Result of Standard Hough Transform and Probabilistic one]{Result of Hough Standard Transform (left) and Probabilistic (right). In white all the edges detected with Canny, in red the detected straight lines}
+	\caption[Result of Standard Hough Transform and Probabilistic one]{Result of Hough Standard Transform (left) and Probabilistic (right). In white all the edges detected with Canny, in red the detected straight lines.}
 	\label{fig:HoughStandard}
 \end{figure}
 
@@ -64,7 +63,7 @@ Thus, this method can be used as good starting point to further process the imag
 	\includegraphics[width=5.0cm]{BoundBox_sourceOnlyPolig}
 	\qquad
 	\includegraphics[width=5.0cm]{BoundBox_resultOnlyPolig}
-	\caption[Result of bounding box detection]{Result of the algorithm: on the left the original image, on the right the contours detected}
+	\caption[Result of bounding box detection]{Result of the algorithm: on the left the original image, on the right the contours detected.}
 	\label{fig:BoundBoxresultOnlyPolig}
 \end{figure}
 
@@ -104,8 +103,7 @@ However, lot of non interesting edge are detected, so parameters have to be chos
 
 \textit{Image features} are small patches that are useful to compute similarities between images. Please note that these features are different from corner points.
 They indicates particular details that are different from others. Detecting these areas is important to recognize objects of interest in the image. The \textit{descriptors} of these features contain the visual description of the patches, and they are used to recognize similarities.\\
-This method uses a \textit{object image} and a \textit{scene image}. The first is a sort of template (note that this method is not a template matching (TODO CITA MY SEZ)) %todo cita sezione template match?)
-which contains only the object to be found (in this case, the square face of the hole). The second is the image in which we want to detect this object (in this case, what the camera is seeing).\\
+This method uses a \textit{object image} and a \textit{scene image}. The first is a sort of template (note that this method is not a template matching as the one in section \ref{subsec:templateMatch}) which contains only the object to be found (in this case, the square face of the hole). The second is the image in which we want to detect this object (in this case, what the camera is seeing).\\
 After good \textit{features} are extracted from both images, the \textit{descriptors} are used to match them, thus, detecting the object in the scene.
 Then, it is necessary to find the perspective transformation between object image and the scene (i.e. find homography). This is needed to take into account that usually pose and scaling of the object in the scene are not the same of the object image.\\
 The OpenCV \href{https://docs.opencv.org/3.4/d7/dff/tutorial_feature_homography.html}{tutorial} use different tools:

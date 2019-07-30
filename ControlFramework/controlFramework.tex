@@ -37,7 +37,7 @@ In this section, principal used notations are described.
 	\item The system velocity vector or the robot $\dot{\boldsymbol{y}} \in \mathbb{R}^n$, ~
 	$\dot{\boldsymbol{y}} \triangleq 
 	\begin{bmatrix}\dot{\boldsymbol{q}} \\ \boldsymbol{v}\end{bmatrix}$,\\
-	where $\dot{\boldsymbol{q}} \in \mathbb{R}^{l}$ are the arm joint velocities and $\boldsymbol{v} \in \mathbb{R}^{6}$ is the vehicle velocity vector. The first three component of $\boldsymbol{v}$ are the linear velocities $\boldsymbol{v}_1 \triangleq \begin{bmatrix}\dot{x} \\ \dot{y} \\ \dot{z}\end{bmatrix}$ and the last three are the angular velocities $\boldsymbol{v}_2 \triangleq \begin{bmatrix}p \\ q \\ r\end{bmatrix}$, both with components in the vehicle frame $\langle v \rangle$. The vehicle is considered fully actuated, so the vector $\dot{\boldsymbol{y}}$ concincides with the control vector used by the kinematic layer.
+	where $\dot{\boldsymbol{q}} \in \mathbb{R}^{l}$ are the arm joint velocities and $\boldsymbol{v} \in \mathbb{R}^{6}$ is the vehicle velocity vector. The first three component of $\boldsymbol{v}$ are the linear velocities $\boldsymbol{v}_1 \triangleq \begin{bmatrix}\dot{x} \\ \dot{y} \\ \dot{z}\end{bmatrix}$ and the last three are the angular velocities $\boldsymbol{v}_2 \triangleq \begin{bmatrix}p \\ q \\ r\end{bmatrix}$, both with components in the vehicle frame $\langle v \rangle$. The vehicle is considered fully actuated, so the vector $\dot{\boldsymbol{y}}$ coincides with the control vector used by the kinematic layer.
 \end{itemize}
 	
 \section{Control Objectives}
@@ -161,7 +161,8 @@ where $S_0 \triangleq \mathbb{R}^n$, $S_{k-1}$ is the manifold of solutions of a
 		\vspace{5px}
 		\ENDFOR 
 		\vspace{5px}
-		\STATE{$\dot{\boldsymbol{\bar{y}}} = \boldsymbol{\rho}_N$}}
+		\STATE{  $\dot{\bar{\boldsymbol{y}}} = \boldsymbol{\rho}_N$  }
+	}
 	\end{algorithmic}
 \end{algorithm}
 
@@ -228,7 +229,7 @@ with $\dot{\boldsymbol{x}}_t$ the object velocity with component on $\langle t \
 %\end{equation}
 %This represents the subspace where $\dot{\boldsymbol{y}}_{ab}$ is constrained to lay for the firm grasp assumption.\\
 
-The equation \eqref{eq:coopintro} derived from the grasp constrain can be expressed in the Cartesian space as:
+The equation \eqref{eq:coopintro} derived from the grasp constraint and can be expressed in the Cartesian space as:
 \begin{equation}
 	\dot{\boldsymbol{x}}_t = \boldsymbol{J}_{t,a} \boldsymbol{J}^\#_{t,a} \dot{\boldsymbol{x}}_t =  \boldsymbol{J}_{t,b} \boldsymbol{J}^\#_{t,b} 
 	\dot{\boldsymbol{x}}_t 
@@ -244,12 +245,13 @@ The equation \eqref{eq:coopintro} derived from the grasp constrain can be expres
 The kernel of $\boldsymbol{C}$, called \textit{Cartesian Constraint Matrix}, express the space of achievable object velocities at the current configuration.\\
 The idea of the scheme is to put a non-reactive task at the top of the priority, to constrain the desired object velocity $\dot{\boldsymbol{\tilde{x}}}$ in this subspace. In this way both agents can follow this desired object velocity despite the different situation caused by other objectives.\\
 \begin{figure}[H]
-	\begin{center}
-		\includegraphics[width=1\columnwidth]{coopScheme.png}
-		\caption{The cooperation algorithm with its different steps }\label{fig:coopScheme}
-	\end{center}
+	\centering
+	\centerline{
+		\includegraphics[width=1.2\columnwidth]{coopScheme.png} }
+	\caption{The cooperation algorithm with its different steps}
+	\label{fig:coopScheme}
 \end{figure}
-The algorithm, schematized in fig. \ref{fig:coopScheme} proceeds as follows:
+The algorithm, sketched in fig. \ref{fig:coopScheme} proceeds as follows:
 \begin{itemize}
 	\item In the first step, the two agents run the algorithm of \ref{sec:tpik} as they were the only to act. So, we have:
 	\begin{equation}
@@ -270,21 +272,21 @@ The algorithm, schematized in fig. \ref{fig:coopScheme} proceeds as follows:
 			\mu_0 > 0
 	    \end{gathered}
 	\end{equation}
-	where $\dot{\boldsymbol{\bar{x}}}_t$ is the ideal velocity that, if applied, would asymptotically take the tool to the desired goal.\\
-	The \textit{cooperative} tool velocity is a \textit{weighted} compromise between the two \textit{non cooperative} ones. The \textit{weights} $\mu_a, \mu_b$ given more freedom to the robot which meet the highest error $\boldsymbol{e}$. This error is a way to understand how much one robot is in difficult in tracking the \textit{ideal} tool velocity $\dot{\boldsymbol{\bar{x}}}_t$.
+	where $\dot{\bar{\boldsymbol{x}}}_t$ is the ideal velocity that, if applied, would asymptotically take the tool to the desired goal.\\
+	The \textit{cooperative} tool velocity is a \textit{weighted} compromise between the two \textit{non cooperative} ones. The \textit{weights} $\mu_a, \mu_b$ given more freedom to the robot which meet the highest error $\boldsymbol{e}$. This error is a way to understand how much one robot is in difficult in tracking the \textit{ideal} tool velocity $\dot{\bar{\boldsymbol{x}}}_t$.
 	
-	\item The new \textit{cooperative} tool velocity $\dot{\hat{\boldsymbol{x}}}_t$ is not, in general, a \textit{feasible} velocity that both vehicle can perform. So, an additional passage is required:
+	\item The new \textit{cooperative} tool velocity $\dot{\hat{\boldsymbol{x}}}_t$ is not, in general, a \textit{feasible} velocity that both vehicle can provide to the tool. So, an additional passage is required:
 	\begin{equation}
 		\dot{\tilde{\boldsymbol{x}}}_t \triangleq \big( \boldsymbol{I} - \boldsymbol{C}^\# \boldsymbol{C} \big) \dot{\hat{\boldsymbol{x}}}_t
 	\end{equation}
 	with $\boldsymbol{C}$ defined in \eqref{eq:constrainMatrixC}.
 	
-	\item Each agent run a new TPIK procedure, identical to the first one, but with a \textit{non-reactive} control objectives to track the \textit{feasible cooperative} velocity $\dot{\tilde{\boldsymbol{x}}}_t$. The output of the two agents algorithm, $\dot{\boldsymbol{\hat{y}}}_a$ and $\dot{\boldsymbol{\hat{y}}}_b$ will be the final velocity which the kinematic layer provide.\\
+	\item Each agent run a new TPIK procedure, identical to the first one, but with a \textit{non-reactive} control objectives to track the \textit{feasible cooperative} velocity $\dot{\tilde{\boldsymbol{x}}}_t$. The outputs of the two agents algorithm, $\dot{\hat{\boldsymbol{y}}}_a$ and $\dot{\hat{\boldsymbol{y}}}_b$ will be the final velocities which the kinematic layer provides.\\
 	Moving the equality control objective to make the end effector reach the goal at the top of the hierarchy does not influence the safety tasks. This property is proven in \cite{tesiWander}.
 \end{itemize}
 
 In this described method, the only information that the agent must exchange are the
-\textit{non-cooperative} velocities $\dot{\boldsymbol{x}}_{t,a}, \dot{\boldsymbol{x}}_{t,b}$, the feasible ones $\dot{\boldsymbol{\tilde{x}}}$, and the constrain matrix $\boldsymbol{C}$. Furthermore, even less data can be exchanged if the \textit{coordinator} is a procedure which runs on a robot, and it is not on an external node. 
+\textit{non-cooperative} velocities $\dot{\boldsymbol{x}}_{t,a}, \dot{\boldsymbol{x}}_{t,b}$, the feasible ones $\dot{\boldsymbol{\tilde{x}}}$, and the constraint matrix $\boldsymbol{C}$. Furthermore, even less data can be exchanged if the \textit{coordinator} is a procedure which runs on a robot, and it is not on an external node. 
 
 
 

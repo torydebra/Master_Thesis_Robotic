@@ -13,7 +13,8 @@
     \graphicspath{{Introduction/Figures/EPS/}{Introduction/Figures/}}
 \fi
 
-Nowadays, different kinds of robot are largely used for underwater missions. A particular type of submarine robot is the Underwater Vehicle Manipulator System (UVMS): an autonomous underwater vehicle (AUV) capable of accomplishing tasks that require a certain level of dexterity, thanks to single or multiple arms.\\
+Nowadays, Robotics is spreading in any considerable area of human life. Fields such as exploration of deep space and sea, healthcare, industrial application, transportation, show more and more usage of robotics systems. The research has the responsibility to tackle the increasing needs that these many application have.\\
+The underwater environment is one of the field where Robotics is in a fast escalation, being the sea so important, from industry to environmental issues. Nowadays, different kinds of robot are largely used for underwater missions. A particular type of submarine robot is the Underwater Vehicle Manipulator System (UVMS): an autonomous underwater vehicle (AUV) capable of accomplishing tasks that require a certain level of dexterity, thanks to single or multiple arms.\\
 A really innovative field for underwater missions is the analysis of cooperation between multiple agents, which permits to extend their flexibility. Cooperative robots are two or more robots, identical or different, that coordinate themselves autonomously (i.e.\ without human intervention) to accomplish various objectives, from mapping an area to assembling an object.   
 
 This thesis focuses on a totally unexplored environment: cooperative \textit{peg-in-hole} assembly with underwater manipulators. It is part of the TWINBOT project [\cite{TWINBOT2019}], which is devoted to make a step forward to missions in complex scenarios. Effort is devoted to extend the capability of robots to be able to solve strategic missions.
@@ -23,13 +24,11 @@ Another part of the work is done at \href{http://www.graal.dibris.unige.it/}{GRA
 
 The architecture is implemented in C++ and the code is avaible on GitHub at the following link:  \href{https://github.com/torydebra/AUV-Coop-Assembly}{https://github.com/torydebra/AUV-Coop-Assembly}.\\
 
-%todo controlla sta strucure
-TODO\\
-This thesis is structured as follows. Chapter \ref{chap:introduction} introduces the problem, recaps the previous work in this field, and states objectives of the work. Chapter \ref{chap:control} defines the theory behind the work. Chapter \ref{chap:method} applies the theory explained to the actual problem. In Chapter \ref{chap:results} the simulation set-up is described and results are discussed. Chapter \ref{chap:vision} focuses on the vision part, explaining methods and discussing results. In Chapter \ref{chap:conclusions}, conclusions are given.
+This thesis is structured as follows. Chapter \ref{chap:introduction} introduces the problem, recaps the previous work in this field, and states objectives of the work. Chapter \ref{chap:control} defines the theory behind the work. Chapter \ref{chap:method} applies the theory explained to the actual problem, introducing new methods for the stated problem. In Chapter \ref{chap:results} the simulation set-up is described and results are discussed. Chapter \ref{chap:vision} focuses on the vision part, explaining methods and examining results. In Chapter \ref{chap:conclusions}, conclusions are given. In Appendix \ref{chap:AppendixCode} further explanation about the code are given, and in Appendix \ref{chap:AppendixVision} discarded methods (but maybe useful for other purposes) for Vision are briefly presented.
 
 \section{State of the Art}
 \label{sec:stateArt}
-Robots have been massively introduced in various fields to help humans in different tasks. Nowadays, there are strategies to use them in underwater environments. A manipulator (robot arm) is considered to be the most suitable tool for executing sub-sea intervention operations. Hence, unmanned underwater vehicles (UUVs), such as remotely operated vehicles (ROVs) and autonomous underwater vehicles (AUVs), are equipped with one or more underwater manipulators.
+Robots have been massively introduced in various fields to help humans in different tasks. Nowadays, there are various strategies to use them in underwater environments. A manipulator (robot arm) is considered to be the most suitable tool for executing sub-sea intervention operations. Hence, unmanned underwater vehicles (UUVs), such as remotely operated vehicles (ROVs) and autonomous underwater vehicles (AUVs), are equipped with one or more underwater manipulators.
 
 During the last 20 years, underwater manipulators have been used for many different sub-sea tasks in various fields, for example, underwater archaeology [\cite{IntroApp4}; \cite{IntroApp3}], marine geology [\cite{IntroApp1}; \cite{IntroApp2}], and military applications [\cite{IntroApp5}].
 
@@ -40,7 +39,7 @@ Since early '90s, research in marine robotics started focusing on the developmen
 
 
 %first works
-For the above reasons, the research started to increase the effort toward augmenting the autonomy level in underwater manipulation. For example, to reduce the operator’s fatigue, some autonomous control features were implemented in work class ROVs [\cite{IntroTeleopRov}]. Another solution is to completely replace ROVs with autonomous underwater vehicles (AUVs).
+For the above reasons, the research started to increase the effort toward augmenting the autonomy level in underwater manipulation. For example, to reduce the operator's fatigue, some autonomous control features were implemented in work class ROVs [\cite{IntroTeleopRov}]. Another solution is to completely replace ROVs with autonomous underwater vehicles (AUVs).
 
 Some pioneering projects in this field carried out in the '90s. The AMADEUS project [\cite{IntroAMADEUS1}] developed grippers for underwater manipulation [\cite{IntroAMADEUS2}] and studied the problem of dual arm manipulation [\cite{IntroAMADEUS3}].
 
@@ -93,7 +92,7 @@ Since those times, the task priority framework has been applied to numerous robo
 
 
 The problem of the classical task priority framework, evident in all the previous mentioned works, is that inequality control objectives (e.g.\ avoiding
-joint limits) were never treated as such. In fact, the corresponding tasks were always active, like the equality ones. So, for example, also when the joints are sufficiently far from their limits, the fact that the task is active uselessly adds constraints and ``consumes" DOFs.
+joint limits) were never treated as such. In fact, the corresponding tasks were always active, like the equality ones. So, for example, also when the joints are sufficiently far from their limits, the fact that the task is active uselessly adds constraints and \enquote{consumes} DOFs.
 Thus, without a transition, the safety control objectives like joint limits could be only considered as secondary. Otherwise, they would consume DOFs, and mission tasks, like reaching a position with the end-effector, can never be accomplished. This led to an undesired situation where safety tasks have a lower priority with respect to non-safety ones.\\
 
 

@@ -117,7 +117,7 @@ It is important to scale up and down the template and to compute various time th
 \subsection{Detection Results}
 \label{subsec:detectResult}
 In this case, the find square method give the best results. As can be see in fig. \ref{fig:detectResults}, differences from the ideal method and this one are barely visible.
-In the way it works, it should be noticeable that this method gives good results only if the camera approximately face the cuboid structure at the front. (TODO? as can be see se ti metti di lato...). If the side face is more visible, it will be the one detected. So, we must know which side the robot is facing to give the 3D correspondence points in the .init file.\\
+In the way it works, it should be noticeable that this method gives good results only if the camera approximately face the cuboid structure at the front. If the side face is more visible, it will be the one detected. So, we must know which side the robot is facing to give the 3D correspondence points in the .init file.\\
 In addition, this method is suitable if no other squares of similar dimensions are present. If so, further work is needed to discriminate them. Also, is not suitable with other kind of shapes (a pipe hole, for example). It is also important to point out that sometimes the method fail to find any shape in the right image. This happened approximately 30\% of the time, and could show a very bad robustness and low predictability of the method. However, the fail is obviously detectable and another trial can be done easily.\\
 The template matching is less precise than the previous. Plus, if the face is view from a different angle, other template image is needed, with an orientation similar to what the robot is seeing. In general, lot of template images at different angles are needed. Otherwise, some processing of the template image is necessary to orient it in a different way. Also, building the shape around the centre point is more difficult, if this shape is not a square. Anyway, the template method is more general because can be used also for different shapes (e.g. a hole of a round pipe).
 
@@ -265,7 +265,7 @@ In the plot of the errors (fig. \ref{fig:clickErrors}, fig. \ref{fig:squareError
 	\includegraphics[width=7.15cm]{tracking/square-depth.eps}\\
 	\hspace*{20px}\textit{Stereo Camera Case} \hspace{75px} \textit{Stereo Depth Camera Case}\\
 	\vspace{30px}
-	\caption[Tracking error plots with find square detection initialization]{Linear and Angular Error (in norm) between true pose and estimated pose. The detection step here used the find square method.}
+	\caption[Tracking error plots with find square detection initialization]{Linear and Angular Error (in norm) between true pose and estimated pose. The detection step here uses the find square method.}
 	\label{fig:squareErrors}
 \end{figure}
 
@@ -281,6 +281,6 @@ In the plot of the errors (fig. \ref{fig:clickErrors}, fig. \ref{fig:squareError
 	\includegraphics[width=7.15cm]{tracking/templ-depth.eps}\\
 	\hspace*{20px}\textit{Stereo Camera Case} \hspace{75px} \textit{Stereo Depth Camera Case}\\
 	\vspace{30px}
-	\caption[Tracking error plots with template matching detection initialization]{Linear and Angular Error (in norm) between true pose and estimated pose. The detection step here used the template matching method.}
+	\caption[Tracking error plots with template matching detection initialization]{Linear and Angular Error (in norm) between true pose and estimated pose. The detection step here uses the template matching method.}
 	\label{fig:templateErrors}
 \end{figure}
