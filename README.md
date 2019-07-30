@@ -1,2 +1,2 @@
-# Master_Thesis_Report
-Master Thesis pdf, for now, it included only short introduction and some state of art. 
+# Master_Thesis_Robotic (in development)
+Master Thesis with latex files and images
