@@ -14,6 +14,7 @@
 \usepackage{lettrine}
 \usepackage{subfig}
 \usepackage{csquotes}
+\usepackage[utf8]{inputenc} % usually not needed (loaded by default)
 \usepackage[T1]{fontenc}
 \usepackage[bitstream-charter]{mathdesign}
 \usepackage{graphicx,kantlipsum,setspace}
@@ -30,10 +31,10 @@
 % declare commonly used operators
 \DeclareMathOperator*{\argmax}{argmax}
 
-%\newcounter{fileAlgorithm}[fileAlgorithm]
+\newcounter{fileAlgorithm}[fileAlgorithm]
 \makeatletter
 \newenvironment{fileAlgorithm}[1][htb]{%
-	%\let\c@algorithm\c@fileAlgorithm %different counter for files
+	\let\c@algorithm\c@fileAlgorithm %different counter for files
 	\renewcommand{\ALG@name}{File}% Update algorithm name
 	\begin{algorithm}[#1]%
 	}{\end{algorithm}}
@@ -85,12 +86,12 @@
 % A page with the abstract and running title and author etc may be
 % required to be handed in separately. If this is not so, comment
 % the following 3 lines:
-% \begin{abstractseparate}
+ %\begin{abstractseparate}
 %   \input{Abstract/abstract}
 % \end{abstractseparate}
 
+\frontmatter
 \maketitle
-
 % add an empty page after title page
 \newpage\null\thispagestyle{empty}\newpage
 
@@ -98,7 +99,6 @@
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{3}
 
-\frontmatter
 \include{Dedication/dedication}
 \include{Acknowledgement/acknowledgement}
 \include{Abstract/abstract}
@@ -126,9 +126,4 @@
 \addcontentsline{toc}{chapter}{References}    % add References to contents page
 
 \end{document}
-
-
-
-
-%TODO Unmanned non vuol dire quello che pensi, rileggi state of art per refusi
-%TODO chiedi se devo linkare codice mio... tipo Detector di che è classe per i seguenti algo di visioni che sto per elencare
+%TODO glossary??

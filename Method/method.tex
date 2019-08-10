@@ -12,15 +12,16 @@
     \graphicspath{{Method/Figures/EPS/}{Method/Figures/}}
 \fi
 
-In this chapter, the theory explained in the previous chapter \ref{chap:control} is exploited to the specific scenario stated for this thesis.\\
-A specific objective, the \textit{Force-Torque} objective (\ref{sec:forceTask}), is added to the TPIK list. This permits to help the insertion phase, dealing with forces and torques \textit{at kinematic level}.\\
-Another section (\ref{sec:changeGoal}) describes another (additional) method to improve the performance of the mission. In brief, the goal frame inside the peg is, in general, not precise. This causes additional contacts between peg and inner hole. This collisions are used to modify the goal frame, reducing the error of the estimated goal pose.
+In this chapter, the theory explained in the previous Chapter \ref{chap:control} is exploited to deal with the scenario stated for this thesis.\\
+In Section \ref{sec:forceTask}, a new control objective, called \textit{Force-Torque} objective, is added to the Action list of the TPIK approach. The aim of this new objective is to drive the peg \enquote{away} from collisions that may happen during the insertion phase. Thanks to force-torque data given by a sensor, this will help the mission, reducing the amount of collisions between the peg and the hole. It is important to notice that we are exploiting force-torque information at kinematic level.\\
+In section \ref{sec:taskList}, a list of objectives, including the new Force-Torque one, is presented. This composes the Action $\mathcal{A}$ that must be accomplished for the stated mission.\\
+Section \ref{sec:changeGoal} describes another (additional) method which exploits the data given by the force-torque sensor. In brief, this new \textit{routine}, called Change Goal, shifts the origin of the goal frame (which is inside the hole) according to the forces detected on the peg. The aim is to compensate the error given by a not perfectly estimation of the hole's pose.
 
 
 \section{Force-Torque Objective}
 \label{sec:forceTask}
-Information from a force torque sensor can be exploited at kinematic level, inserting an additional control objective into the TPIK procedure. The aim of this objective is to zeroing the forces and torques acting on the peg. This is done generating properly joints and vehicle velocities to drive the peg in such a way the forces and torques decrease.\\
-If we visualize the resultant of the forces caused by the collisions on the peg as a vector, moving \textit{linearly} the peg along this vector will cause the forces itself to decrease. The same idea can be use with torques, \textit{rotating}, along the resultant vector instead of moving linearly.\\
+Information from a force torque sensor can be exploited at kinematic level, inserting an additional control objective into the TPIK procedure. The aim of this objective is to zeroing the forces and torques acting on the peg. This is done by generating properly joints and vehicle velocities to drive the peg in such a way the forces and torques decrease. This objective is similar to the one used for pipeline weld inspection in \cite{IntroRecent}.\\
+If we visualize the resultant of the forces on the peg caused by the collisions as a vector, moving \textit{linearly} the peg along this vector will cause the forces to decrease. The same idea can be use with torques, \textit{rotating}, along the resultant vector instead of moving linearly.\\
 
 \noindent The \textit{feedback reference rate} for this objective will be:
 \begin{equation}
@@ -31,19 +32,20 @@ If we visualize the resultant of the forces caused by the collisions on the peg 
 		0 - \| \boldsymbol{f} \| \\ 0 -\| \boldsymbol{m} \|
 	\end{bmatrix} \qquad 0 < \gamma_f < 1, \quad 0 < \gamma_m < 1
 \end{equation}
-where $\| \boldsymbol{f} \|$ and $\| \boldsymbol{m} \|$ are the norms of the forces and torques vectors $\boldsymbol{f}$ and $\boldsymbol{m}$. Gains smaller that $1$ are necessary because big gains would mean too big velocities provided.\\
-It can be noticed that, instead the full 3-dimensional vectors $\boldsymbol{f}$ and $\boldsymbol{m}$, the norms $f$ and $m$ are used. This is done to not overconstrain the system and to let more freedom to lower priority task. Even with norms, the control objective is obviously satisfied, because zeroing the norms brings each component of the vector to zero.\\
+where $\| \boldsymbol{f} \|$ and $\| \boldsymbol{m} \|$ are the norms of the forces and torques vectors $\boldsymbol{f}$ and $\boldsymbol{m}$. Gains smaller that $1$ are necessary to reduce the amount of speed requested. In fact, for example, if a force with a norm of 1 N (which is relatively small, so common to be detected) was present, a gain equal to 1 would mean to request a tool speed of 1 m/s, that is an exaggeration for this case.\\
+It can be noticed that, instead of the full 3-dimensional vectors $\boldsymbol{f}$ and $\boldsymbol{m}$, the norms $\| \boldsymbol{f} \|$ and $\| \boldsymbol{m\textbf{}} \|$ are used. This is done to not overconstrain the system and to let more freedom to lower priority task. Even with norms, the collisions are reduced, because when we bring to zero the norms, also each component of the vector tends to zero.\\
 
-The \textit{feedback reference rate} of equation \eqref{eq:refForceTask} is intended to be like a velocity that the tool must follow. So, the Jacobian must be built considering this thing. For the \textit{task-induced} Jacobian (section \ref{sec:tpik}) of this new task, we have to take the linear and the angular part, and pre-multiplying them for the normal vector of $\boldsymbol{f}$ and $\boldsymbol{m}$ transposed:
+The \textit{feedback reference rate} of equation \eqref{eq:refForceTask} is a velocity that the tool must follow. So, the Jacobian must be built considering this fact. For the \textit{task-induced} Jacobian (section \ref{sec:tpik}) of this new task, we have to split the linear and the angular part of the tool Jacobian $\boldsymbol{J}_t$. Then, due to the fact that we are considering the norms, we have to pre-multiplying the two parts for the normal vector of $\boldsymbol{f}$ and $\boldsymbol{m}$ transposed:
 \begin{equation}
+	\label{eqJacobFor}
 	\boldsymbol{J}_{ft} \triangleq \begin{bmatrix}{\boldsymbol{J}}_f \\[1em] {\boldsymbol{J}}_m \end{bmatrix} \triangleq 
 	\begin{bmatrix} \left( - \; \dfrac{\boldsymbol{f}}{\| \boldsymbol{f} \|}\right)^T \enspace ^{lin}\boldsymbol{J}_t  \\[1.5em]
 		\left( - \; \dfrac{\boldsymbol{m}}{\| \boldsymbol{m} \|}\right) ^T \enspace ^{ang}\boldsymbol{J}_t  \end{bmatrix} 
 \end{equation}
-where $\boldsymbol{J}_f, \boldsymbol{J}_m \in \mathbb{R}^{1\times l}$; $J_t$ is the Jacobian which express how Cartesian velocity $\dot{\boldsymbol{x}}_t$ of the tool are affected by the system velocity vector  $\dot{\boldsymbol{y}}$; $lin, ang$ superscripts refer to \textit{linear} (top three rows) and \textit{angular} (bottom three rows) parts of $J_t$.\\
+where $\boldsymbol{J}_f, \boldsymbol{J}_m \in \mathbb{R}^{1\times l}$; $\;\;\; \boldsymbol{J}_t$ is the Jacobian which express how the Cartesian tool velocity $\dot{\boldsymbol{x}}_t$ is affected by the system velocity vector  $\dot{\boldsymbol{y}}$; $\;\;lin, ang$ superscripts refer to \textit{linear} (top three rows) and \textit{angular} (bottom three rows) parts of $\boldsymbol{J}_t$.\\
 
-This objective can be considered as a \textit{pre-requisite} one (section \ref{sec:coClass}). So, it is put at higher priority than the \textit{reaching goal objective}. This will cause the robot to, first, try to nullified the forces and torques (if collisions happened), and only after (i.e. \textit{if possible}) to move the peg towards the goal.\\
-Deactivating the task is necessary when the forces and/or torques are zero, to not generate system velocities for this task when they are not necessary. So a smooth activation function (section \ref{sec:activations}), $\boldsymbol{A} \in \mathbb{R}^{2 \times 2}$ is used:
+This objective can be considered as a \textit{pre-requisite} one (section \ref{sec:coClass}), because it is better to reduce the collisions \textit{before} going on with the insertion, also to avoid stuck. In truth, this kind of objective could be also considered as a Physical Constraints one, like in \cite{IntroRecent}. In this case, the first choice is made. In both cases, it is always put at higher priority than the \textit{reaching goal objective}. This will cause the robot to, first, try to nullified the forces and torques (if collisions happened), and only after (i.e. \textit{if possible}) to move the peg towards the goal.\\
+Deactivating the task is necessary when the forces and/or torques are zero, to not generate system velocities for this task when they are not necessary. So a smooth activation function $\boldsymbol{A} \in \mathbb{R}^{2 \times 2}$ is used (similarly to the generic one of section \ref{sec:activations}):
 \begin{equation}
 	\begin{gathered}
 		\boldsymbol{A}_{ft} \triangleq
@@ -69,56 +71,76 @@ Deactivating the task is necessary when the forces and/or torques are zero, to n
 		\end{cases}
 	\end{gathered}
 \end{equation}  
-where $s(\cdot)$ is a smooth \textit{increasing} function from 0 to 1, and $\Delta$ a constant to create the smooth zone. 
+where $s(\cdot)$ is a smooth \textit{increasing} function from 0 to 1, and $\Delta$ a constant to create the smooth zone.\\
+In this case, the activation function is also important for a mathematical detail. In fact, we can see from the Jacobian formula \eqref{eqJacobFor}, that the norms are in the denominator. When they are near to zero, numerical issue (such as too big values in the Jacobian) may happen. This is a common problem when a task is used with the norm. But an easy solution is to deactivate the task when the norm is below a little value $\epsilon$. In this case, for the force part:
+\begin{equation}
+		a_f(\| \boldsymbol{f}\|) \triangleq
+		\begin{cases}
+			0,& \| \boldsymbol{f}\| \leq \epsilon \\
+			s(\| \boldsymbol{f}\|), & \epsilon < \| \boldsymbol{f}\| \leq 0 + \Delta\\
+			1, & \| \boldsymbol{f}\| > 0 + \Delta\\
+		\end{cases} \\
+\end{equation}
+The activation for the torque is similar.\\
+
+Considering the minimization problem presented with the formula \eqref{eq:rminproblem}, for this specific objective the equation will be:
+\begin{equation}
+	S_k \triangleq \left\{ \arg \mathrm{R\textrm{-}}\min_{\dot{\bar{\boldsymbol{y}}} \in S_{k-1}} \left\| \boldsymbol{A}_{ft} (\dot{\bar{\boldsymbol{x}}}_{ft} - \boldsymbol{J}_{ft} \dot{\bar{\boldsymbol{y}}}) \right\|^2 \right\}
+\end{equation}
+with $k$ that depends on the order of priority chosen for the new objective.
+
 
 \section{Objectives Prioritized List}
-In this section, the objectives inserted into the TPIK procedure are listed and briefly explained.\\
+\label{sec:taskList}
+In this section, the objectives inserted into the TPIK procedure, to form the Action $\mathcal{A}$ suitable for the mission, are listed and briefly explained.\\
 
-The first task prioritized list, the one where the two robot acts independently to each other (section \ref{sec:coopScheme}), is:
+The first task prioritized list, the one where the two robot act independently to each other, is:
 \begin{itemize}
-	\item \textbf{Joint Limits avoidance} (\textit{reactive, inequality, safety}): this objective keep joint away for their mechanical limits. It must be at high priority because it is a safe task, and also must be an inequality objective to not overconstrain the system when joints are away from their limits.
+	\item \textbf{Joint Limits avoidance} (\textit{reactive, inequality, safety}). This objective keeps joint away from their mechanical limits. It must be at an high priority because it is a \textit{safety} objective. It is also an \textit{inequality} one to not overconstrain the system when joints are away from their limits.
 	
-	\item \textbf{Horizontal Attitude} (\textit{reactive, inequality, safety}): to maintain the vehicle horizontal respect to the water surface. Most of the underwater vehicle are are passively stable in roll and pitch and these DOF are not controllable, so this objective is only needed for fully actuated vehicles (as stated in this case).
+	\item \textbf{Horizontal Attitude} (\textit{reactive, inequality, safety}). This objective is to maintain the vehicle horizontal respect to the water surface. Most of the underwater vehicle are passively stable (and also not controllable) in roll and pitch, so this objective would be useless. In this thesis, where buoyancy is not simulated and the vehicle has full DOF, this objective is necessary. It is also important to not occur in the singularity given by the Euler Sequence used to describe the orientation (section \ref{sec:definitions}), which arises when the pitch is equal to $\pi/2$. The objective is consider a \textit{safety} one because it is more important than the accomplishment of the mission; and it is an \textit{inequality} for the same reason of the previous. 
 	
-	\item \textbf{Force-Torque} (\textit{reactive, inequality, pre-requisite}): to nullified the forces and torques acting on the peg during the insertion. This objective is detailed in section \ref{sec:forceTask}.
+	\item \textbf{Force-Torque} (\textit{reactive, inequality, pre-requisite}). This objective is to reduce the forces and torques acting on the peg during the insertion. This objective is detailed in section \ref{sec:forceTask}.
 	
-	\item \textbf{Tool position control} (\textit{reactive, equality, mission}): this is the objective that define the mission. It is used to bring the tool towards the defined goal (i.e. inside the hole).
+	\item \textbf{Tool position control} (\textit{reactive, equality, mission}). This objective is the one that defines the real mission. It is used to bring the tool towards the defined goal (i.e. inside the hole), so it always must be active.
 	
-	\item \textbf{Preferred Arm Shape} (\textit{reactive, inequality, optimization}): this is a low priority objective that, \textit{if possible}, maintain the arm in a predefined shape. This shape permits the arm to have good dexterity but it is also useful to transport the peg in a natural way.
+	\item \textbf{Preferred Arm Shape} (\textit{reactive, inequality, optimization}). This is a low priority objective to maintain the arm in a predefined shape. This shape permits the arm to have good dexterity (if the shape is chosen wisely) but it is also useful to transport the peg in a natural way. Being only an \textit{optimization} objective, it is put at low priority.
 		
 \end{itemize}
 
-\noindent The categories (written in italic) are explained in section \ref{sec:controlObjectives}; further explanations on these and other objectives are available in \cite{IntroMaris2}, \cite{tesiWander}, \cite{IntroRecent}. Please note that in the code there is also an additional \textit{last task} which is used to cancel out any practical discontinuities during task activations [\cite{IntroMaris1}].\\
+\noindent The categories (written in italic) are explained in section \ref{sec:controlObjectives}. Please note that in the code there is also an additional \textit{last task} which is used to cancel out any practical discontinuities during task activations [\cite{IntroMaris1}].\\
 
-The TPIK procedure is run two more times, one for the vehicle-arm coordination (section \ref{sec:armVehScheme}), the other for the cooperation between the two robots (section \ref{sec:coopScheme}). Respectively, two \textit{non-reactive} objectives are put at the top of the hierarchy listed above, as explained in the cited sections.\\
-%todo non serve più sta frase? The final output will be the velocity command $\dot{\boldsymbol{\bar{y}}}$.\\
+After the first TPIK procedure is run for the presented list, it is called other two more times. One is for the cooperation between the two robots (section \ref{sec:coopScheme}), and the other for the vehicle-arm coordination (section \ref{sec:armVehScheme}). Respectively, two \textit{non-reactive} objectives are put at the top of the hierarchy listed above, as explained in the cited sections.\\
 
-Please note that some important objectives related to safe transportation (e.g. obstacle avoidance, minimum altitude from seafloor, minimum distance between robots), grasping (e.g. camera centring object) are not considered because they are not necessary in the particular experiment chosen, and also because they are explored in other works [\cite{IntroMaris2}; \cite{IntroRecent}].\\
+Please note that some important objectives related to safe transportation (e.g. obstacle avoidance, minimum altitude from seafloor, minimum distance between robots), grasping (e.g. camera centring object) are not considered because they are not necessary in the particular experiment chosen, and also because they are explored in other works [\cite{IntroMaris2}; \cite{tesiWander}; \cite{IntroRecent}].\\
 
 
-\section{The Change Goal Frame routine}
+\section{Change Goal Frame routine}
 \label{sec:changeGoal}
-In general, the frame where the tool is dragged by the control architecture (the \textit{goal} frame) is known with some errors. This is the case when, for example, we have some computer vision algorithm to estimate the hole pose. 
-This error between ideal goal and estimated one, along linear and angular component, can cause the peg to collide more with the hole. If the peg clashes against the hole structure face (i.e. outside the proper hole) it is pushed back and a stuck may happen. In the literature, various methods (cited in \ref{sec:artPeg}) have been explored to deal with this problem.\\
-This thesis focuses only the final part of the problem, i.e. when the peg is inside the hole, but bad alignment causes lot of collisions between peg and hole's internal walls. In this case, the peg usually does not stuck in a intermediate position, because the forces and torques acting on the peg \textit{naturally} drive it towards the goal (that is at a certain depth in the hole). In such a way, the peg continuously scrapes along the hole's walls, possibly damaging the pipe, the hole and also the robot which can suffer some stress. In practice there is a chattering problem: the peg continuously \textit{bounces} 
-because the control wants to drag it towards the erroneous pose, while the hole's walls cause forces in opposite direction.\\
-The method explained in this section try to solve this problem, modifying the goal accordingly to the forces acting on the peg. Considering the cartesian coordinate of the origin $^{w}\boldsymbol{g} \in \mathbb{R}^{3}$ of the goal frame, projected on the world frame, we modify it, providing $^{w}\boldsymbol{g'} \in \mathbb{R}^{3}$ as:
+In general, the frame where the tool is driven to by the control architecture (i.e. the \textit{goal} frame) is known with some errors. This is the case when, for example, we have some computer vision algorithm to estimate the hole pose. 
+This error between ideal goal and estimated one, both in the linear and in the angular components, can cause the peg to collide a lot with the hole. If the peg clashes against the hole structure face (i.e. outside the proper hole), it is pushed back and a stuck may happen. The result is that the peg will go on bouncing back and forth forever. In the literature, various methods (cited in \ref{sec:artPeg}) have been explored to deal with the problem of \textit{finding the hole}, moving the peg on the surface. In this work, this is not explored.\\
+
+This thesis focuses only the final part of the \textit{peg-in-hole}, i.e. when the peg is inside the hole, but bad alignment causes a lot of collisions with internal hole's  walls. In this case, usually, the peg does not stuck in a intermediate position, because the forces and torques acting on the peg \textit{naturally} drive it inside the cavity. But, in such a way, the peg continuously scrapes along the hole's walls, possibly damaging itself, the hole and also the robot which can suffer some stress. In practice there is a chattering problem: the peg continuously \textit{bounces} 
+because the control wants to drag it towards the erroneous pose, while the hole's walls cause forces in a different direction.\\
+
+The method explained in this section try to solve this problem, modifying the goal accordingly to the forces acting on the peg.\\
+Let us consider the Cartesian coordinate of the origin $^{w}\boldsymbol{g} \in \mathbb{R}^{3}$ of the goal frame, projected on the world frame. According to the force detected, we modify this origin, providing $^{w}\boldsymbol{g'} \in \mathbb{R}^{3}$ as:
 \begin{equation}
 	\label{eq:changeGoal}
 	\begin{gathered}
 		%
 	^{w}\boldsymbol{g'} = \,^{w}\boldsymbol{g} + \, ^{w}\boldsymbol{\tilde{f}} \\
 	 ^{w}\boldsymbol{\tilde{f}} =  \,^{w}\boldsymbol{R}_t \,^{t}\boldsymbol{\tilde{f}} \\
-	 ^{t}\boldsymbol{\tilde{f}} = k \, [ 0, \, f_y, \, f_z ] \qquad 0 < k < 1
+	 ^{t}\boldsymbol{\tilde{f}} = k \, [ 0, \, f_y, \, f_z ], \qquad 0 < k < 1
 %
 	 \end{gathered}
 \end{equation}
-where $[ 0, \, f_y, \, f_z ]$ is the vector which represent the resultant of the forces acting on the peg, projected on the \textit{tool} frame, but with the component along x put to zero; $^{w}\boldsymbol{R}_t$ is the rotation matrix from world to tool; k a positive gain lesser than 1.\\
-The component on $x$ axis of the force is neglected. This because the x axis of the tool frame $ \langle t \rangle $ is the one along the length of the peg. So, we do not want that this component modify the goal because can modify the wanted depth at which we want the peg to be inserted.\\
-To proper utilize the force vector in the sum with the vector of the goal position, we must use a gain $k$. This gain is less than one change very slowly the goal position.\\
-The formula \eqref{eq:changeGoal} is used every time a force (not null) is detected.
+where $[ 0, \, f_y, \, f_z ]$ is the vector which represent the resultant of the forces acting on the peg, projected on the \textit{tool} frame, but with the component along x put to zero; $^{w}\boldsymbol{R}_t$ is the rotation matrix from world to tool; k a positive gain smaller than 1.\\
+The component on $x$ axis of the force is neglected. This is done because the x axis of the tool frame $ \langle t \rangle $ is the one along the length of the peg. So, we do not want that this component modifies the goal because it would change the wanted depth of insertion.\\
 
-To understand better the method, we can take as an example one where the estimated goal is a bit on the left of the ideal one, but not so much to make the peg miss the hole. In such a case, the control architecture drive the peg on the left of the hole, causing a lot of collisions with the left side of the inner hole. So, the peg suffers forces with an important component in the right direction. Thus, this method shifts the goal to the right.\\
-From this example should be noticed that this approach could cause the same problem in the opposite direction, if the goal is modified too much on the right. For this reason, setting a suitable $k$ is important.
+To proper utilize the data given by the sensor, that is the force vector, we must use a gain $k$. This gain is less than $1$ for a similar reason as the one explained for the Force-Torque objective (section \ref{sec:forceTask}). For example, when a little force of 1N is detected, obviously we don't want to move the goal frame of 1 m or more. Instead, we want very little modifications, done every time a force (not null) is detected by the sensor. So the formula \eqref{eq:changeGoal} shifts the goal at the same frequency of the provided sensor data. Obviously we can also update the goal less often, maybe with a bigger gain.\\ 
+
+To understand better the method, we can take as an example the situation where the estimated goal is a bit on the left respect to the centre of the hole, but not so much to make the peg misses the hole. In such a case, the control architecture drives the peg on the left of the centre, causing a lot of collisions with the left side of the inner hole. So, the peg suffers forces with an important component in the right direction. Thus, this method shifts the goal to the right.\\
+From this example should be noticed that this approach could cause the same problem with the opposite side of the cavity, if the goal is shifted too much on the right. For this reason, setting a suitable $k$ is important.
 
 

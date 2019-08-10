@@ -4,7 +4,6 @@
 % THESIS INTRODUCTION
 
 
-% TODO identazioen dopo ogni progetto/paragrafo o no?
 \chapter{Introduction}
 \label{chap:introduction}
 \ifpdf
@@ -15,16 +14,16 @@
 
 Nowadays, Robotics is spreading in any considerable area of human life. Fields such as exploration of deep space and sea, healthcare, industrial application, transportation, show more and more usage of robotics systems. The research has the responsibility to tackle the increasing needs that these many application have.\\
 The underwater environment is one of the field where Robotics is in a fast escalation, being the sea so important, from industry to environmental issues. Nowadays, different kinds of robot are largely used for underwater missions. A particular type of submarine robot is the Underwater Vehicle Manipulator System (UVMS): an autonomous underwater vehicle (AUV) capable of accomplishing tasks that require a certain level of dexterity, thanks to single or multiple arms.\\
-A really innovative field for underwater missions is the analysis of cooperation between multiple agents, which permits to extend their flexibility. Cooperative robots are two or more robots, identical or different, that coordinate themselves autonomously (i.e.\ without human intervention) to accomplish various objectives, from mapping an area to assembling an object.   
+A really innovative field for underwater missions is the analysis of cooperation between multiple agents, which permits to extend their flexibility. Cooperative robots are two or more robots, identical or different, that coordinate themselves to accomplish various objectives, from mapping an area to assembling an object.   
 
-This thesis focuses on a totally unexplored environment: cooperative \textit{peg-in-hole} assembly with underwater manipulators. It is part of the TWINBOT project [\cite{TWINBOT2019}], which is devoted to make a step forward to missions in complex scenarios. Effort is devoted to extend the capability of robots to be able to solve strategic missions.
+This thesis focuses on a totally unexplored environment: cooperative \textit{peg-in-hole} assembly with underwater manipulators. It is part of the TWINBOT project \mbox{[\cite{TWINBOT2019}]}, which is devoted to make a step forward for missions in complex scenarios. Effort is devoted to extend the capability of robots to be able to solve more strategic missions.
 
 Part of this thesis is developed at \href{http://www.irs.uji.es/}{IRSLab} at Universitad Jaume I, Castell\`{o}n de la Plana, Spain, during the time I spent as an Erasmus+ 2018/19 student, under the supervision of Professor Pedro J. Sanz and Professor Ra\'{u}l Mar\'{i}n Prades. The IRSLab is the coordinator of the cited TWINBOT project. \\
 Another part of the work is done at \href{http://www.graal.dibris.unige.it/}{GRAAL} at Universit\`{a} degli Studi di Genova, Italy, under the supervision of Professor Giuseppe Casalino and Professor Enrico Simetti.\\
 
-The architecture is implemented in C++ and the code is avaible on GitHub at the following link:  \href{https://github.com/torydebra/AUV-Coop-Assembly}{https://github.com/torydebra/AUV-Coop-Assembly}.\\
+The architecture is implemented in C++ and the code is avaible on GitHub at the following link:  \url{https://github.com/torydebra/AUV-Coop-Assembly}. A video of the final experiment is visible at the following link: \url{https://streamable.com/kvoxq} (online; accessed 10-08-2019).\\
 
-This thesis is structured as follows. Chapter \ref{chap:introduction} introduces the problem, recaps the previous work in this field, and states objectives of the work. Chapter \ref{chap:control} defines the theory behind the work. Chapter \ref{chap:method} applies the theory explained to the actual problem, introducing new methods for the stated problem. In Chapter \ref{chap:results} the simulation set-up is described and results are discussed. Chapter \ref{chap:vision} focuses on the vision part, explaining methods and examining results. In Chapter \ref{chap:conclusions}, conclusions are given. In Appendix \ref{chap:AppendixCode} further explanation about the code are given, and in Appendix \ref{chap:AppendixVision} discarded methods (but maybe useful for other purposes) for Vision are briefly presented.
+This thesis is structured as follows. This Chapter \ref{chap:introduction} introduces the problem, recaps the previous works in this field, and states the objectives of the whole thesis. \mbox{Chapter \ref{chap:control}} defines the theory behind the work, focusing on the Task Priority Inverse Kinematic approach. Chapter \ref{chap:method} applies the theory explained to the actual problem, introducing new methods for the stated problem. In Chapter \ref{chap:results} the simulation set-up is described and results are discussed. Chapter \ref{chap:vision} focuses on the vision part, explaining methods and examining results. In Chapter \ref{chap:conclusions}, conclusions and possible further works are given. In Appendix \ref{chap:AppendixCode} further explanation about the code are given, and in Appendix \ref{chap:AppendixVision} discarded methods (but maybe useful for other purposes) for Vision are briefly presented.
 
 \section{State of the Art}
 \label{sec:stateArt}
@@ -35,7 +34,7 @@ During the last 20 years, underwater manipulators have been used for many differ
 There are many specific tasks where the underwater manipulators are important, from salvage of sunken objects [\cite{IntroSpecApp1}] to mine disposal [\cite{IntroSpecApp2}; \cite{IntroSpecApp3}]. One particular scenario is towards the oil and gas industry, where underwater manipulators are used for pipe inspection, opening and closing valves, drilling, rope cutting [\cite{IntroSpecApp4}], and, in general, to reduced field maintenance and development costs [\cite{IntroSpecApp5}]. A recent survey explored the market related to this technology for oil and gas industry [\cite{IntroSpecApp6}].
 
 \subsection{Previous Works in Underwater Missions}
-Since early '90s, research in marine robotics started focusing on the development of underwater vehicle manipulator systems (UVMS). ROVs have been largely used, but they have high operational costs. This is due to the need for expensive support vessels, and highly qualified man power effort. In addition, the pilot which operates the vehicle and the arm experiences heavy fatigue in order to carry out the manipulation task.\\
+Since early '90s, research in marine robotics started focusing on the development of underwater vehicle manipulator systems (UVMS). ROVs have been largely used, but they have high operational costs. This is due to the need for expensive support vessels and highly qualified man power effort. In addition, the pilot which operates the vehicle and the arm experiences heavy fatigue in order to carry out the manipulation task.\\
 
 
 %first works
@@ -63,7 +62,7 @@ The TRIDENT concepts were enhanced within the MARIS project [\cite{IntroMaris0}]
 
 
 %actual projects
-TRIDENT and MARIS concentrated on using the control framework to perform only grasping actions. Recent work  [\cite{IntroRecent}] analyses how the method can be used in different scenarios, like pipeline inspection and deep sea mining exploration.
+TRIDENT and MARIS concentrated on using the control framework to perform not only grasping actions. A recent work  [\cite{IntroRecent}] analyses how the method can be used in different scenarios, like pipeline inspection and deep sea mining exploration.
 
 The DexROV project [\cite{IntroDexrov}] is studying latencies problems which arise de-localizing on the shore the manned support to ROV operations.
 
@@ -84,7 +83,7 @@ This concept was later generalized to multiple task priority levels [\cite{Intro
 
 First studies in control of redundant manipulators [\cite{IntroTpik6}; \cite{IntroTpik5}] managed the free residual DOF in such a way to solve the problem of singularity and obstacle avoidance for an industrial manipulator. Another work [\cite{IntroTpik7}] introduced the use of potential functions in industrial manipulators and mobile robots.
 
-A different solution [\cite{IntroTpik8}] proposed a suboptimal approach. The secondary task was solved as if it was alone, but after it was projected in the null space of the higher priority one. To deal with singularities, a variable damping factor was used [\cite{IntroTpik1}]. This solution was later enhanced and called null-space-based behavioural control [\cite{IntroTpik9}].\\
+A different solution [\cite{IntroTpik8}] proposed a suboptimal approach. The secondary task was solved as if it was alone, but after it was projected in the null space of the higher priority one. To deal with singularities, a variable damping factor was used [\cite{IntroTpik1}]. This solution was later enhanced and called \textit{null-space-based behavioural control} [\cite{IntroTpik9}].
 The approach does not deal with the problem of algorithmic singularities that can occur due to rank loss caused by the projection matrix. Further works [\cite{IntroTpik11}; \cite{IntroTpik10}] focused on this problem.\\
 
 
@@ -93,7 +92,7 @@ Since those times, the task priority framework has been applied to numerous robo
 
 The problem of the classical task priority framework, evident in all the previous mentioned works, is that inequality control objectives (e.g.\ avoiding
 joint limits) were never treated as such. In fact, the corresponding tasks were always active, like the equality ones. So, for example, also when the joints are sufficiently far from their limits, the fact that the task is active uselessly adds constraints and \enquote{consumes} DOFs.
-Thus, without a transition, the safety control objectives like joint limits could be only considered as secondary. Otherwise, they would consume DOFs, and mission tasks, like reaching a position with the end-effector, can never be accomplished. This led to an undesired situation where safety tasks have a lower priority with respect to non-safety ones.\\
+Thus, without a transition, the safety control objectives like joint limits could be only considered as secondary. Otherwise, other mission tasks, like reaching a position with the end-effector, can never be accomplished. This led to an undesired situation where safety tasks have a lower priority with respect to non-safety ones.\\
 
 
 The challenge in activating (inserting) or deactivating (deleting) a task is that these transitions would imply a discontinuity in the null space projector, which leads to a discontinuity in the control law [\cite{IntroTpik21}]. Thus, in the last decade, researches focused on integrate safety inequality control objectives in a more efficient way. 
@@ -102,14 +101,14 @@ A new inversion operator was introduced [\cite{IntroTpik22}] for the computation
 
 Another work [\cite{IntroTpik21}] modified the reference of each task that was being inserted or being removed, in order to comply with the already present ones, and in such a way to smooth out any discontinuity. However, the algorithm requires $m!$ pseudo-inverses with $m$ number of tasks. For this reason, the authors provided approximate solutions, which are suboptimal whenever more than one task is being activated or deactivated.
 
-Another approach [\cite{IntroTpik25}] directly incorporated the inequality control objectives as inequality constraints in a Quadratic Program (QP). According to this, the idea was generalized to any number of priority levels [\cite{IntroTpik26}]. At each priority level, the algorithm solves a QP problem, finding the optimal solution (in a least-squares sense). Slack variables are used to incorporate inequality constraints in the minimization process. If the solution contains a slack variable different from zero, it will mean that the corresponding inequality constraint is not satisfied. Otherwise, the inequality constraints are propagated to the next level and transformed into an equality ones (to prevent lower priority tasks from changing the best least-square trade-off found). A similar process is done for the equality constraints. A drawbacks of this approach is that the cascade of QP problems can grow in dimension. Another issue is that the activation and deactivation of tasks are not considered. This last point is important when temporal sequences of tasks are used, for example when  assembling objects [\cite{IntroTpik28}; \cite{IntroTpik27}].
+Another approach [\cite{IntroTpik25}] directly incorporated the inequality control objectives as inequality constraints in a Quadratic Program (QP). According to this, the idea was generalized to any number of priority levels [\cite{IntroTpik26}]. At each priority level, the algorithm solves a QP problem, finding the optimal solution (in a least-squares sense). Slack variables are used to incorporate inequality constraints in the minimization process. If the solution contains a slack variable different from zero, it will mean that the corresponding inequality constraint is not satisfied. Otherwise, the inequality constraints are propagated to the next level and transformed into an equality ones (to prevent lower priority tasks from changing the best least-square trade-off found). A similar process is done for the equality constraints. A drawbacks of this approach is that the cascade of QP problems can grow  in dimension rapidly. Another issue is that the activation and deactivation of tasks are not considered. This last point is important when temporal sequences of tasks are used, for example when  assembling objects [\cite{IntroTpik28}; \cite{IntroTpik27}].
 
 Instead of a cascade of QP problems, another research [\cite{IntroTpik29}] proposed to solve a single problem finding the active set of all the constraints at the same time. Due to its iterative nature, the authors proposed to limit the number of iterations to achieve a boundary on the computation time, to be more suitable for a real-time implementation. But this solution is not optimal, and, again, activation/deactivation of equality tasks is not considered.
 
 Improvements are made in the already cited TRIDENT project [\cite{IntroTrident1}; \cite{IntroTrident4}], where field trials proved how to consider activation and deactivation of scalar tasks. But the solution still lacks the ability to deal with activation/deactivation of multidimensional tasks, i.e.\ multiple scalar tasks at the same priority level.
 
 %sunto di paper da cui ho copiato
-The goal reached by TRIDENT are improved in the MARIS project [\cite{IntroMaris0}; \cite{IntroTpik30}], where, among the others accomplishment, task transitions were successfully implemented in the framework. In particular [\cite{IntroMaris1}], possible discontinuities that can arise are eliminated by a task-oriented regularization and a singular value oriented regularization. Plus, the original simplicity of the task priority framework is retained thanks to pseudo-inverses.
+The goals reached by TRIDENT are improved in the MARIS project [\cite{IntroMaris0}; \cite{IntroTpik30}], where, among the other accomplishments, task transitions were successfully implemented in the framework. In particular [\cite{IntroMaris1}], possible discontinuities that could arise are eliminated by a task-oriented regularization and a singular value oriented regularization. Plus, the original simplicity of the task priority framework is retained thanks to pseudo-inverses.
 
 
 \subsection{The Peg-in-Hole Assembly Problem}
@@ -117,7 +116,7 @@ The goal reached by TRIDENT are improved in the MARIS project [\cite{IntroMaris0
 The peg-in-hole is an essential task in assembly processes in various fields, such as manufacturing lines.
 
 This task can be performed following the classical position control method. But this is possible only if precise position of the hole is provided, and the position control error of the robot is zero.
-In practice, these conditions can only be obtained in specialized scenario. In the case of more versatile robots, such as industrial or underwater manipulators, 
+In practice, these conditions can only be obtained in specialized scenario. In the case of more versatile robots, such as underwater manipulators, 
 imprecisions and errors are unavoidable.
 
 To deal with these problems, classical works exploit two kind of instruments: cameras and sensors. 
@@ -125,23 +124,35 @@ With camera(s), the robot can roughly recognize the objective (i.e.\ the hole) a
 
 Other approaches perform precise assembly of the parts thanks to force/torque sensors installed on the wrist. A study [\cite{IntroPeg4}] successfully accomplishes the assembly detecting the force of contact to compensate the positional uncertainty. Newman \textit{et al.} study [\cite{IntroPeg7}] shows how sensors can be used to build map of force and torque values of each contact point.  
 In another works [\cite{IntroPeg9}; \cite{IntroPeg8}], the location of the hole was estimated using the measured reaction moment occurred by the contact.
-Another good aspect of the sensors [\cite{IntroPeg6}; \cite{IntroPeg5}] is that they can guarantee stable contact through real-time contact force feedback.
+Another good aspect of the sensors  is that they can guarantee stable contact through real-time contact force feedback [\cite{IntroPeg6}; \cite{IntroPeg5}].
 
-Other proposals [\cite{IntroPeg10}; \cite{IntroPeg11}] try to estimate the state of the contact using joint position sensor. This permits to not use the force/torque sensors on the wrist, which would need highly control frequency, and would increase overall cost and operation time. 
+Other proposals [\cite{IntroPeg10}; \cite{IntroPeg11}] try to estimate the state of the contact using joint position sensor. This permits to not use the force/torque sensors on the wrist, which would need high control frequency, and would increase overall cost and operation time. 
 Some researchers [\cite{IntroPeg12}] show that assembly task can be accomplished without contact force information and with inaccurate vision data. The proposed strategy  mimics the human behaviour: the peg was rubbed in a point close to the object until the relevant objects mated using compliant characteristics. The compliance allows the robot to softly adapt to the hole [\cite{IntroPeg13}; \cite{IntroPeg14}].
-A Similar, unexpensive, approach is tested experimentally [\cite{IntroPeg15}], without the use of force/torque sensors (i.e.\ no force feedback), nor Remote-center-compliance devices, and with inaccurate hole information.
+A similar, unexpensive, approach is tested experimentally [\cite{IntroPeg15}], without the use of force/torque sensors (i.e.\ no force feedback), nor Remote-center-compliance devices, and with inaccurate hole information.
 
 
 
 
 \section{Motivation and Rationale}
-Sea plays an important role in our societies. Many examples are given in the previous section \ref{sec:stateArt}. When such kind of environment are so important, robotic usage and exploitation is necessary at different level.\\
-This thesis aim to improve the current state of art in autonomy of underwater vehicles. Efforts in this direction can help the robots doing always more complicated tasks, substituting gradually the remotely operated version of them. The peg-in-hole is one example of these complicated tasks. In general, robotic assembly problems have been addressed and explored widely, but, to the best of this author's knowledge, no works have been done for cooperatively assembly in underwater scenarios, except for the TWINBOT project [\cite{TWINBOT2019}], which this thesis is part of. Productions related to this problem can help to improve this actual lack and make the technology to advance. Cooperative agents augment the capability of the single, for example to carry an heavy object. It is important to notice that cooperation here is intended at \textit{kinematic level}. So, for example, it is not intended to deal with swarms of robots. In this case, cooperation means two (or, in general, more than two) robots that share (in some way) their commanded system velocities (the usual output of the kinematic layer) to move together without, in this case, make the common tool fall or break. There is not \enquote{high level} reasoning with a planner, but only mathematical formulas to make the robot \textit{cooperate}. Such improvements at kinematic level are important because reduce the effort at high level (i.e. the planner) that, in general, is always necessary but with this kind of method can be less complicated.\\
+Sea plays an important role in our societies. Many examples are given in the previous section \ref{sec:stateArt}. When such a kind of environment are so important, exploitation of robotic systems is necessary at different level.\\
+This thesis aims to improve the current state of the art in underwater intervention missions. Efforts in this direction can help the robots to accomplish more and more complicated tasks, substituting gradually their remotely operated versions (ROVs), and, in some cases, humans. This would help to reduce the cost, to increase the safety, to boost the performances, and, in general, to accomplish missions that before were unthinkable.
 
-At the time this thesis was being developed, the TWINBOT project was in an early stage. So, this works evolves autonomously, always keeping an eye on the main objective of the project: improve capabilities of cooperative underwater intervention robots.\\
-The aim  is to developed a kinematic control framework suitable for the underwater \textit{peg-in-hole} scenario. Task Priority Inverse Kinematic is exploited for the control of the single agent, for the cooperation part, and to exploit the information given by cameras and a force-torque sensor.\\
-For the detection and pose estimation of the hole, computer vision algorithm are exploited. In particular, stereo-vision methods are implemented, using the cameras of a third robot, who acts exclusively for the vision part.\\ 
-This pose is only an estimation: to correctly insert the peg into the hole during the final phase, a force-torque sensor is used and information provided by it shared between the two agents.\\
+The peg-in-hole is one example of these complicated tasks. In general, robotic assembly problems have been addressed and explored widely, but, to the best of this author's knowledge, no works have been done for cooperatively assembly in underwater scenarios, except for the TWINBOT project [\cite{TWINBOT2019}], which this thesis is part of. Productions related to this problem can help to fill this current lack and can make the technology to advance. 
+
+Cooperative agents augment the capability of the single, for example to carry an heavy object. It is important to notice that cooperation here is intended at \textit{kinematic level}. So, for example, we are not speaking about robotic swarms, where more \enquote{planning} cooperation is explored with Artificial Intelligence techniques. Instead, here cooperation means two (or, in general, more than two) robots that share (in some way) their commanded system velocities (the usual output of the kinematic layer) to move together, without, in this case, make the common tool fall or break. There is not \enquote{high level} reasoning with a planner, but there are mathematical formulas with vectors and matrices to make the robot \textit{cooperate}.\\
+Such improvements at kinematic level are important because they reduce the work-effort at higher levels (i.e. the planner), and they make the overall system faster.\\
+
+At the time this thesis was being developed, the TWINBOT project was in an early stage. So, this works evolves autonomously, always keeping an eye on the main objective of the project: improving capabilities of cooperative underwater intervention robots. The aim  is to developed a kinematic control framework suitable for the cooperative underwater \textit{peg-in-hole} problem stated, considering methods that can be used also for other robotics missions.\\
+The Task Priority Inverse Kinematic (TPIK) approach is exploited for the single agent kinematic control (section \ref{sec:tpik}), for the arm-vehicle coordination (section \ref{sec:armVehScheme}), and for the cooperation scheme (section \ref{sec:coopScheme}).\\
+A force-torque sensor is used to have data from the collisions that happen between the \textit{peg} and the \textit{hole} during the insertion phase. This information is used by two different methods which help to achieve the final goal and to reduce frictional forces that can damage the objects or the robots.\\
+The first one is a new objective called Force-Torque objective (section \ref{sec:forceTask}). Its duty is to reduce the forces and the torques that act on the peg, moving it into the opposite direction. The objective is inserted into the TPIK list, among the other objectives. This is noticeable because we exploit a \enquote{dynamic} information at kinematic level.\\
+The second method is called Change Goal routine (section \ref{sec:changeGoal}). Its job is to change the origin of the goal frame (that is inside the hole) where the control drives the peg. This is done to compensate possible errors in the hole's pose. For example, if the goal is slightly on the left respect to the exact centre of the hole, lot of collisions happen with the left inner side, so lot of forces directed on the right are detected. This routine simply moves the origin of the goal frame according to the detected forces, on the right in the cited example. 
+However, it must be considered that the \textit{peg-in-hole} is simplified: the problem of having too big errors, which makes the peg to collide with the external face of the hole, is not considered.
+
+Another part of the thesis focuses on computer vision, specifically on the pose estimation of the hole (Chapter \ref{chap:vision}). In particular, stereo-vision methods are used by a third robot, which acts exclusively for the Vision purpose.\\
+The Vision routine is divided into two phases.\\
+The first is the \textit{detection} (section \ref{sec:visDetect}) where the hole's structure is found in the images that the camera captures. Among all the algorithms tried, one based on shape detection and another based on template matching are discussed in the final results (section \ref{subsec:detectResult}).\\
+The second phase, the \textit{tracking} (section \ref{sec:visTracking}), uses the first one as initialization for a \textit{markerless model-based} method. In this case, trials with a mono-camera, a stereo-camera, and depth stereo-camera are compared and discussed.
  
 
 %todo vedi se inserire sta cosa come altra subsec di state of art
