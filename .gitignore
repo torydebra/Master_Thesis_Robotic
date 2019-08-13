@@ -23,6 +23,8 @@
 *.brf
 *.sty
 *.synctex.gz
+*.glsdefs
+*.txss
 PhDThesis_example.pdf
 PhDThesis_example.ps
 PhDThesis_example.tex

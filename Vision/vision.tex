@@ -28,7 +28,7 @@ Anyway, for this thesis, another Girona 500 is used to not deal with an addition
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=12.5cm]{frameVision.png}
-	\caption[Main frames of the Vision scenario]{Screenshot where the main frames for the Vision are depicted. The cameras 3D models are not present. The left and the right cameras have same orientation, and the origin of the right one is shifted of 0.2 meters along left camera's $x$-axis. Vehicle and cameras axis are parallel. Hole's $x$-axis goes inside the cavity. World's frame is depicted only to understand its orientation, its origin is not in that point.}
+	\caption[Main frames related to the Vision phase]{Screenshot where the main frames for the Vision are depicted. The cameras 3D models are not present. The left and the right cameras have same orientation, and the origin of the right one is shifted of 0.2 meters along left camera's $x$-axis. Vehicle and cameras axis are parallel. Hole's $x$-axis goes inside the cavity. World's frame is depicted only to understand its orientation, its origin is not in that point.}
 	\label{fig:visionFrames}
 \end{figure}
 
@@ -105,7 +105,7 @@ To provide these correspondences, two methods are evaluated: \textit{Find Square
 Other methods and functions for the detection are briefly explained in \mbox{Appendix \ref{chap:AppendixVision}.}\\
 Another, not explored, method can be using some code tags (like QR codes) on the cuboid surface. However, in underwater situations this can be difficult to be put in practice.
 
-\subsection{Already known coordinates Method}
+\subsection{Already Known Coordinates Method}
 \label{subsec:clickMethod}
 As explained, with this method the 2D coordinates are perfectly known. This is done by letting the user to click on the four pixels which contain the square's corners. Given that the image is made by discrete pixels, it is impossible to have an ideal point which is exactly the corner, but the errors for this are not noticeable.
 
@@ -289,13 +289,13 @@ This demonstrates that it is not always better to have a stereo RGB-D camera ins
 \captionof{figure}[Tracking results with the three different detection initializations]{Results of the three tracking methods with the three detection initializations. Red lines are the contours of the model which represents where the object is estimated to be; little red $+$ marks are the points detected by the keypoint algorithm. Green dots are the tracked correspondent points between the left and the right images, in fact they are present only in the stereo cases. The arrows represent the estimated object frame: green for y-axis, blue for z-axis, red for x-axis (which goes inside the hole and it is barely visible).}
 \label{fig:photoTracking}
 \endgroup
-\vspace{60px}
+\vspace{35px}
 
 With the two good initializations (the ideal one and the Find Square one), the two stereo methods have similar results, overall better than the mono case. This is visible in the errors' plots of figure \ref{fig:clickErrors} and figure \ref{fig:squareErrors}. Anyway, we can also see that the mono camera case has not so bad performance. Considering that a stereo camera is much more expensive, a tracking with a single mono camera can be an advisable deal.\\
 
 Another interesting outcome for the monocular case, is that the position of the camera influences the results. This is because different view angles provide different tracking performance.\\
 
-In the plots of the errors (fig. \ref{fig:clickErrors}, fig. \ref{fig:squareErrors}, and fig. \ref{fig:templateErrors}), a lot of variations can be seen while the time goes on, although the robot and the object are still. This is due to the nature of the tracking algorithm, which continuously updates the pose at each new image received by the camera. Anyway, it must be noticed that the variations are little for both the linear and the angular parts. So, taking the pose at a certain time instead of an another is not so influential.\\
+In the plots of the errors (fig. \ref{fig:clickErrors}, fig. \ref{fig:squareErrors}, and fig. \ref{fig:templateErrors}), a lot of variations can be seen while the time goes on, although the robot and the object are still. This is due to the nature of the tracking algorithm, which continuously updates the pose at each new image received by the camera. Anyway, it must be noticed that the variations are little for both the linear and the angular parts. So, taking the pose at a certain time instead of an another is not so influential.
 
 \begin{figure}
 	\centering
@@ -333,7 +333,7 @@ In the plots of the errors (fig. \ref{fig:clickErrors}, fig. \ref{fig:squareErro
 	}
 	\hspace*{20px}\textit{Stereo Camera Case} \hspace{135px} \textit{Stereo Depth Camera Case}\\
 	\vspace{30px}
-	\caption[Tracking error plots with find square detection initialization]{Linear and angular error (in norm) between the true pose and the estimated one. The tracking is initialized with the Find Square detection method of section \ref{subsec:findSquare}.}
+	\caption[Tracking error plots with Find Square detection initialization]{Linear and angular error (in norm) between the true pose and the estimated one. The tracking is initialized with the Find Square detection method of section \ref{subsec:findSquare}.}
 	\label{fig:squareErrors}
 \end{figure}
 
@@ -353,6 +353,6 @@ In the plots of the errors (fig. \ref{fig:clickErrors}, fig. \ref{fig:squareErro
 	}
 	\hspace*{20px}\textit{Stereo Camera Case} \hspace{135px} \textit{Stereo Depth Camera Case}\\
 	\vspace{30px}
-	\caption[Tracking error plots with template matching detection initialization]{Linear and angular error (in norm) between the true pose and the estimated one. The tracking is initialized with the Template Matching detection method of \mbox{section \ref{subsec:templateMatch}}.}
+	\caption[Tracking error plots with Template Matching detection initialization]{Linear and angular error (in norm) between the true pose and the estimated one. The tracking is initialized with the Template Matching detection method of \mbox{section \ref{subsec:templateMatch}}.}
 	\label{fig:templateErrors}
 \end{figure}

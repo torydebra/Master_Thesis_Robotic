@@ -115,7 +115,7 @@ After the first TPIK procedure is run for the presented list, it is called other
 Please note that some important objectives related to safe transportation (e.g. obstacle avoidance, minimum altitude from seafloor, minimum distance between robots), grasping (e.g. camera centring object) are not considered because they are not necessary in the particular experiment chosen, and also because they are explored in other works [\cite{IntroMaris2}; \cite{tesiWander}; \cite{IntroRecent}].\\
 
 
-\section{Change Goal Frame routine}
+\section{Change Goal Frame Routine}
 \label{sec:changeGoal}
 In general, the frame where the tool is driven to by the control architecture (i.e. the \textit{goal} frame) is known with some errors. This is the case when, for example, we have some computer vision algorithm to estimate the hole pose. 
 This error between ideal goal and estimated one, both in the linear and in the angular components, can cause the peg to collide a lot with the hole. If the peg clashes against the hole structure face (i.e. outside the proper hole), it is pushed back and a stuck may happen. The result is that the peg will go on bouncing back and forth forever. In the literature, various methods (cited in \ref{sec:artPeg}) have been explored to deal with the problem of \textit{finding the hole}, moving the peg on the surface. In this work, this is not explored.\\
@@ -140,7 +140,7 @@ The component on $x$ axis of the force is neglected. This is done because the x 
 
 To proper utilize the data given by the sensor, that is the force vector, we must use a gain $k$. This gain is less than $1$ for a similar reason as the one explained for the Force-Torque objective (section \ref{sec:forceTask}). For example, when a little force of 1N is detected, obviously we don't want to move the goal frame of 1 m or more. Instead, we want very little modifications, done every time a force (not null) is detected by the sensor. So the formula \eqref{eq:changeGoal} shifts the goal at the same frequency of the provided sensor data. Obviously we can also update the goal less often, maybe with a bigger gain.\\ 
 
-To understand better the method, we can take as an example the situation where the estimated goal is a bit on the left respect to the centre of the hole, but not so much to make the peg misses the hole. In such a case, the control architecture drives the peg on the left of the centre, causing a lot of collisions with the left side of the inner hole. So, the peg suffers forces with an important component in the right direction. Thus, this method shifts the goal to the right.\\
+To understand better the method, we can take as an example the situation where the estimated goal is a bit on the left respect to the centre of the hole, but not so much to make the peg miss the hole. In such a case, the control architecture drives the peg on the left of the centre, causing a lot of collisions with the left side of the inner hole. So, the peg suffers forces with an important component in the right direction. Thus, this method shifts the goal to the right.\\
 From this example should be noticed that this approach could cause the same problem with the opposite side of the cavity, if the goal is shifted too much on the right. For this reason, setting a suitable $k$ is important.
 
 

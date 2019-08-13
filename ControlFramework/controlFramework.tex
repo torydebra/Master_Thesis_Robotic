@@ -63,7 +63,7 @@ A general classification based on the \textit{priority} is given here (from the 
 \end{itemize}
 The classes of \textit{priority} of these objectives are only a general classification. Depending on the application, objectives can have a different ordering.
 
-\subsection{Equality and Inequality Objectives}
+\subsection{Equality and Inequality Control Objectives}
 \label{sec:eqIneqObj}
 Difference between equality and inequality control objectives is another important classification. We consider a variable  $ \boldsymbol{x}(\boldsymbol{c}) \in \mathbb{R}^m $, dependent on the robot configuration vector $ \boldsymbol{c}$, with $ m $ \textit{dimension} of the control objective. \\
 The control objective can be of two types:
@@ -212,15 +212,20 @@ For real mobile manipulators, in general, a multi-rate control of arm and vehicl
 \section{Cooperation Scheme}
 \label{sec:coopScheme}
 \begin{figure}[H]
-	\begin{center}
+	%\begin{center}
+	\centerline{
 		\includegraphics[width=0.8\columnwidth]{coopFrames.jpg}
+	}
 		\caption[Relevant frames for the cooperation scheme]{The frames of the two cooperative vehicles carrying a common object}\label{fig:coopFrames}
-	\end{center}
+	%\end{center}
 \end{figure}
 
 In this section, the discussion about cooperation is explained. We limit the explanations to only two cooperative robotic systems, but, in general, more agents can be considered.\\
-The \textit{cooperation} is used to carry a common tool with the two manipulators, without making it fall or break. This is done at kinematic level: the scheme provides suitable system velocities $\dot{\bar{\boldsymbol{y}}}_a$ and $\dot{\bar{\boldsymbol{y}}}_b$ for the two robots considering the constraint given by the common carried object. So, both system velocities $\dot{\bar{\boldsymbol{y}}}_a$ and $\dot{\bar{\boldsymbol{y}}}_b$ must cause same Cartesian velocity $\dot{{\boldsymbol{x}}}_t$ to the tool.\\
-The coordination policy described takes care of the bandwidth restriction present in underwater scenarios. Thus, it deals with the cooperation in a decentralized manner, limiting the amount of data exchanged. This means that a classical \textit{leader-follower} scheme is not used.\\
+
+The \textit{cooperation} is used to carry a common tool with the two manipulators, without making it fall or break. This is done at kinematic level: the scheme provides suitable system velocities $\dot{\bar{\boldsymbol{y}}}_a$ and $\dot{\bar{\boldsymbol{y}}}_b$ for the two robots considering the constraint given by the carried common object. So, both system velocities $\dot{\bar{\boldsymbol{y}}}_a$ and $\dot{\bar{\boldsymbol{y}}}_b$ must cause same Cartesian velocity $\dot{{\boldsymbol{x}}}_t$ to the tool.\\
+The coordination policy that will be presented takes care of the bandwidth restriction typical of underwater scenarios. Thus, it deals with the cooperation in a decentralized manner, limiting as much as possible the amount of data exchanged.\\
+Furthermore, this scheme is different from the classical \textit{leader-follower} ones, because, as we will see, the \enquote{leadership} changes based on the difficulties in tracking the ideal tool velocity that one robot can meet.\\
+
 It is assumed that the object is held firmly by both agents, so no sliding happens during the missions. The two robots agree on a shared fixed frame, so, their respective tool frames $\langle t_a \rangle$ and $\langle t_b \rangle$ and the object frame $\langle o \rangle$ are coincident: 
 \begin{equation} 
 \langle t \rangle \triangleq \langle t_a \rangle = \langle t_b \rangle = \langle o \rangle
@@ -231,23 +236,25 @@ In figure \ref{fig:coopFrames} the main frames related to the cooperation are sh
 \begin{equation}\label{eq:coopintro}
 	\dot{\boldsymbol{x}}_t = \boldsymbol{J}_{t,a} \dot{\boldsymbol{y}}_a = \boldsymbol{J}_{t,b} \dot{\boldsymbol{y}}_b
 \end{equation}
-with $\dot{\boldsymbol{x}}_t$ the object velocity with component on $\langle t \rangle$, $\dot{\boldsymbol{y}}_a$ and $\dot{\boldsymbol{y}}_b$ the system velocity vectors of agents $a$ and $b$ (introduced in section \ref{sec:definitions}), and $\boldsymbol{J}_{t,a}$ and $\boldsymbol{J}_{t,b}$ the system Jacobians of agents $a$ and $b$ with respect to $\langle t \rangle$. These Jacobians tell how the tool velocities $\dot{\boldsymbol{x}}_t$ are affected by the system velocities $\dot{\boldsymbol{y}}_a$ and $\dot{\boldsymbol{y}}_b$. Due to the firm grasp assumption, the tool velocities caused by $\dot{\boldsymbol{y}}_a$ and $\dot{\boldsymbol{y}}_b$ are equal.\\
+with $\dot{\boldsymbol{x}}_t$ the object velocity with component on $\langle t \rangle$; $\dot{\boldsymbol{y}}_a$, $\dot{\boldsymbol{y}}_b$ the system velocity vectors of agents $a$ and $b$ (introduced in section \ref{sec:definitions}); and $\boldsymbol{J}_{t,a}$, $\boldsymbol{J}_{t,b}$ the system Jacobians of agents $a$ and $b$ with respect to $\langle t \rangle$. These Jacobians tell how the tool velocity $\dot{\boldsymbol{x}}_t$ is affected by the system velocities $\dot{\boldsymbol{y}}_a$ and $\dot{\boldsymbol{y}}_b$. Due to the firm grasp assumption, the tool velocities caused by $\dot{\boldsymbol{y}}_a$ and $\dot{\boldsymbol{y}}_b$ must be equal.\\
 
-%
-%Let us rewrite the equation \eqref{eq:coopintro} as:
-%\begin{equation}\label{eq:coopintro2}
-%\begin{gathered}
-%\begin{bmatrix}
-%\boldsymbol{J}_{t,a} & -\boldsymbol{J}_{t,b}
-%\end{bmatrix}
-%\begin{bmatrix}
-%\dot{\boldsymbol{y}}_a \\ \dot{\boldsymbol{y}}_b
-%\end{bmatrix}
-%\triangleq \boldsymbol{G}\dot{\boldsymbol{y}}_{ab}=0 \quad \Longleftrightarrow \quad \dot{\boldsymbol{y}}_{ab} \in ker(\boldsymbol{G}),
-%\end{gathered}
-%\end{equation}
-%This represents the subspace where $\dot{\boldsymbol{y}}_{ab}$ is constrained to lay for the firm grasp assumption.\\
-%
+\noindent Let us rewrite the second part of equation \eqref{eq:coopintro} as:
+\begin{equation}\label{eq:coopintro2}
+	\begin{gathered}
+	\begin{bmatrix}
+	\boldsymbol{J}_{t,a} & -\boldsymbol{J}_{t,b}
+	\end{bmatrix}
+	\begin{bmatrix}
+	\dot{\boldsymbol{y}}_a \\ \dot{\boldsymbol{y}}_b
+	\end{bmatrix}
+	\triangleq \boldsymbol{G}\dot{\boldsymbol{y}}_{ab}=0 \quad \Longleftrightarrow \quad \dot{\boldsymbol{y}}_{ab} \in ker(\boldsymbol{G})
+	\end{gathered}
+\end{equation}
+$ker(\boldsymbol{G})$ represents the subspace where $\dot{\boldsymbol{y}}_{ab}$ is constrained to lay for the firm grasp assumption.\\
+
+We could consider the two manipulators as a unique system simply stacking correctly vectors and matrices. To transport cooperatively the tool, an additional \textit{physical constraint} objective would be added to the TPIK list, to ensure the control outputs a command $\dot{\bar{\boldsymbol{y}}}$ which satisfies the constraint \eqref{eq:coopintro2}. In practice, with this new objective, in the minimization problems of \eqref{eq:rminproblem} we would have $S_1 = ker(\boldsymbol{G})$.\\
+The problem with following this way is that we are not considering that the two vehicles are separate entities. This idea would be feasible when the agent is a single robot with two arms. Instead, in this case, exchanging all the vectors and matrices between the agents during the TPIK procedure would not be possible, especially in an underwater situation. So, another method must be considered.\\
+
 \noindent The equation \eqref{eq:coopintro} can be expressed in the Cartesian space as:
 \begin{equation}
 	\dot{\boldsymbol{x}}_t = \boldsymbol{J}_{t,a} \boldsymbol{J}^\#_{t,a} \dot{\boldsymbol{x}}_t =  \boldsymbol{J}_{t,b} \boldsymbol{J}^\#_{t,b} 
@@ -267,11 +274,12 @@ The idea of the scheme is to put a non-reactive task at the top of the hierarchy
 \begin{figure}[H]
 	\centering
 	\centerline{
-		\includegraphics[width=1.2\columnwidth]{coopScheme.png} }
-	\caption{The cooperation scheme with its different steps}
+		\includegraphics[width=1.22\columnwidth]{coopScheme2.png} }
+	\caption[Cooperation Scheme in the TPIK]{The cooperation scheme with its different steps. The Agent b block is equal to the Agent a one.}
 	\label{fig:coopScheme}
 \end{figure}
-The scheme, sketched in figure \ref{fig:coopScheme} proceeds as follows:
+\vspace{10px}
+\noindent The scheme, sketched in figure \ref{fig:coopScheme} proceeds as follows:
 \begin{itemize}
 	\item In the first step, the two agents calculate system velocities (using the TPIK explained in  section \ref{sec:tpik}) as if they were alone. So, we have:
 	\begin{equation}
@@ -304,14 +312,9 @@ The scheme, sketched in figure \ref{fig:coopScheme} proceeds as follows:
 	\item Each agent runs a new TPIK procedure, with a objective list identical to the first one, but with a \textit{non-reactive} control objective at the top to track the \textit{feasible cooperative} velocity $\dot{\tilde{\boldsymbol{x}}}_t$. The outputs of this procedure, $\dot{\hat{\boldsymbol{y}}}_a$ and $\dot{\hat{\boldsymbol{y}}}_b$ will be the final velocities which the kinematic layer provides.\\
 	Moving the equality control objective to make the end effector reach the goal at the top of the hierarchy does not influence the safety tasks. This property is proven in \cite{tesiWander}.
 \end{itemize}
-
+\vspace{15px}
 The method assumes that the Coordinator can calculate the ideal tool velocity $\dot{\bar{\boldsymbol{x}}}_t$, so it must know the transformation matrix between the goal frame $\langle g \rangle $ and the tool frame $ \langle t \rangle $.\\
 
 It can be noticed how the only information that the agents must exchange are the 
-\textit{non-cooperative} velocities $\dot{\boldsymbol{x}}_{t,a}$ and $\dot{\boldsymbol{x}}_{t,b}$, the matrices $\boldsymbol{J}_{t,a} \boldsymbol{J}^{\#}_{t,a}$ and $\boldsymbol{J}_{t,b} \boldsymbol{J}^{\#}_{t,b}$ (to build the Cartesian Constraint Matrix $\boldsymbol{C}$), and the feasible velocity $\dot{\tilde{\boldsymbol{x}}}_t$. Less data can be exchanged if we have Jacobians expressed analytically. Instead of sharing the two $6 \times 6$ matrices, we can share only two configuration vectors $\boldsymbol{c}$ ($n \times 1$), and make the coordinator calculate the Jacobians from their analytical expressions.\\
+\textit{non-cooperative} velocities $\dot{\boldsymbol{x}}_{t,a}$ and $\dot{\boldsymbol{x}}_{t,b}$, the matrices $\boldsymbol{J}_{t,a} \boldsymbol{J}^{\#}_{t,a}$ and $\boldsymbol{J}_{t,b} \boldsymbol{J}^{\#}_{t,b}$ (to build the Cartesian Constraint Matrix $\boldsymbol{C}$), and the feasible velocity $\dot{\tilde{\boldsymbol{x}}}_t$. Less data can be exchanged if we have Jacobians expressed analytically. In this case, instead of sharing the two $6 \times 6$ matrices, we can share only two configuration vectors $\boldsymbol{c}$ ($n \times 1$), and make the coordinator calculate the Jacobians from their analytical expressions.\\
 Even less data can be shared if the \textit{coordinator} is a procedure that runs on a robot, and it is not on an external node. In this case, practically only half of the amount of data must be shared through water.
-
-%todo di che senza sta policy di coord alua dovevamo scambiare mille data perche agivamo come se fosse un veicolo con due braccia...  ma dovresti metter formula con la G per le y
-
-
-
