@@ -41,7 +41,7 @@ The Vision robot is equipped with two cameras which point in front of it, as sho
 
 \noindent The job is divided in two phases: \textit{Detection}  of the hole (section \ref{sec:visDetect}) and \textit{Tracking} of the hole's pose \mbox{(section \ref{sec:visTracking}).} 
 
-\section{Assumptions}
+\section{Vision Assumptions}
 \label{sec:visioAssumption} %cited by method chapter in assumption section
 For the sake of simplicity, some assumptions are made:
 \begin{itemize}
@@ -195,7 +195,7 @@ Three different trackers have been implemented: a \textit{Mono Cameras Tracker} 
 A tracker is linked to each camera. For RGB cameras, it can be of three types: \textit{edge-based} [\cite{visp-edge}], \textit{keypoint-based} [\cite{visp-klt}] or a mix of both. During the experiments, the hybrid method emerged as the most precise, so all the results in section \ref{subsec:trackResult} refer to this one.\\
 For the depth camera used in the Stereo Depth Camera tracking, the tracker's type can be \textit{normal} or \textit{dense} [\cite{visp-depth}]. Being the \textit{dense} one more robust, it is the chosen one for the trials. Please note that it is also computationally heavier for larger matrix computations, but speed performance is not considered here.
 
-\subsection{Two Mono Cameras Tracking}
+\subsection{Mono Camera Tracking}
 \label{subsec:monoTrack}
 This method derives from the ViSP tutorial \textit{markerless generic model-based tracking using a colour camera}  (\url{https://visp-doc.inria.fr/doxygen/visp-daily/tutorial-tracking-mb-generic.html}).\\
 

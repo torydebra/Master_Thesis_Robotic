@@ -20,7 +20,7 @@ In this section, the implemented control framework is presented, along with the 
 \end{itemize}
 This thesis focuses mostly on the Kinematic Control Layer. Discussions about how to implement a more complete Mission Manager (which acts not only as a support for the KCL, but, for example, it deals also with the \textit{planning} of the mission phases) go out the scope of this work.\\
 
-The framework is build from the one used in \cite{IntroMaris2}, \cite{tesiWander}, and \cite{IntroRecent}. The sections \ref{sec:definitions}, \ref{sec:controlObjectives}, \ref{sec:tpik}, \ref{sec:armVehScheme}, and \ref{sec:coopScheme} derive from these works and in the following pages the main aspects are recalled.
+The framework is build from the one used in \cite{IntroMaris2}, \cite{tesiWander}, and \cite{IntroRecent}. The sections \ref{sec:definitions}, \ref{sec:controlObjectives}, \ref{sec:tpik}, \ref{sec:armVehScheme}, and \ref{sec:coopScheme} derive from these works and in the following pages their main aspects are recalled.
 
 \section{Definitions}
 \label{sec:definitions}
@@ -158,7 +158,7 @@ The aim of the kinematic layer is to find a system velocity vector $\dot{\bar{\b
 S_k \triangleq \left\{ \arg \mathrm{R\textrm{-}}\min_{\dot{\bar{\boldsymbol{y}}} \in S_{k-1}} \left\| \boldsymbol{A}_k (\dot{\bar{\boldsymbol{x}}}_k - \boldsymbol{J}_k \dot{\bar{\boldsymbol{y}}}) \right\|^2 \right\},\, k = 1, 2, \ldots, N,
 \end{equation}
 where $S_0 \triangleq \mathbb{R}^n$, $\:S_{k-1}$ is the manifold of solutions of all the previous tasks in the hierarchy, and $N$ is the total number of priority levels. The notation $\mathrm{R\textrm{-}}\min$ is introduced in \cite{IntroMaris1}, and it indicates a series of regularization to avoid singularities.\\
-This problem is the so called \textit{Task Priority Inverse Kinematic} (TPIK). To solve the formula  \eqref{eq:rminproblem}, the so called \textit{iCAT} (inequality Constraints And Task transitions) framework uses the following algorithm \ref{alg:icat}:
+This problem is the so called \textit{Task Priority Inverse Kinematics} (TPIK). To solve the formula  \eqref{eq:rminproblem}, the so called \textit{iCAT} (inequality Constraints And Task transitions) framework uses the following algorithm \ref{alg:icat}:
 \begin{algorithm}[H]
 	\caption{iCAT} \label{alg:icat}
 	\begin{algorithmic} [1] {\large
@@ -253,7 +253,7 @@ with $\dot{\boldsymbol{x}}_t$ the object velocity with component on $\langle t \
 $ker(\boldsymbol{G})$ represents the subspace where $\dot{\boldsymbol{y}}_{ab}$ is constrained to lay for the firm grasp assumption.\\
 
 We could consider the two manipulators as a unique system simply stacking correctly vectors and matrices. To transport cooperatively the tool, an additional \textit{physical constraint} objective would be added to the TPIK list, to ensure the control outputs a command $\dot{\bar{\boldsymbol{y}}}$ which satisfies the constraint \eqref{eq:coopintro2}. In practice, with this new objective, in the minimization problems of \eqref{eq:rminproblem} we would have $S_1 = ker(\boldsymbol{G})$.\\
-The problem with following this way is that we are not considering that the two vehicles are separate entities. This idea would be feasible when the agent is a single robot with two arms. Instead, in this case, exchanging all the vectors and matrices between the agents during the TPIK procedure would not be possible, especially in an underwater situation. So, another method must be considered.\\
+The problem with following this way is that we are not considering that the two vehicles are separate entities. This idea would be feasible when the agent is a single robot with two arms. Instead, in this case, exchanging all the vectors and matrices between the robots during the TPIK procedure would not be possible, especially in an underwater situation. So, another method must be considered.\\
 
 \noindent The equation \eqref{eq:coopintro} can be expressed in the Cartesian space as:
 \begin{equation}
