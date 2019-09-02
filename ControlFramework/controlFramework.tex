@@ -50,7 +50,7 @@ In this section, the necessary definitions are presented. We will consider the g
 \label{sec:controlObjectives}
 Let us consider what the robot has to achieve. An \textit{objective} is a job that the robot must accomplish during the mission. Different objectives can be requested at the same time, for example we want the joints to stay away from their physical limits and the robot to maintain an horizontal attitude, while the end-effector is reaching a desired pose. \\
 In the following, specific discussions about these objectives are made.
-\subsection{Control Objectives classification}
+\subsection{Control Objectives Classification}
 \label{sec:coClass}
 Control objectives can be classified depending on their importance (i.e. \textit{priority}) in the context of the mission. In fact, some of them can be more important than others. For example, usually we want to avoid an obstacle if this one is in the trajectory given by the reaching goal objective. So, we want \textit{before} to avoid the obstacle and \textit{then} to continue towards the goal. In general, the idea is that the more important objectives have to been satisfied first, and then, \textit{if possible}, also the less important ones. 
 A general classification based on the \textit{priority} is given here (from the more important class to the less important one):
