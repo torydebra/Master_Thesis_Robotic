@@ -1,11 +1,10 @@
 
-# Master_Thesis_Robotic
-Master Thesis with latex files and images
-[Code Repository](https://github.com/torydebra/AUV-Coop-Assembly)  
+# Master Thesis for Robotics Engineering
+Repository for latex files for Master Thesis
 
-### Presentation for thesis defence
-[Presentation](https://github.com/torydebra/Master_Thesis_Robotic/blob/master/presentation.pdf)  
-
+**Thesis pdf**: [Thesis](https://github.com/torydebra/Master_Thesis_Robotic/blob/master/thesis.pdf)  
+**Presentation for thesis defense**: [Presentation](https://github.com/torydebra/Master_Thesis_Robotic/blob/master/presentation.pdf)  
+**Source Code**: [Code Repository](https://github.com/torydebra/AUV-Coop-Assembly)
 
 ### Thesis Abstract
 Robotics is spreading in all the relevant sectors of the human life. The importance of studying this field is confirmed by all the various applications where robots are used: exploration of space and sea, industry, healthcare, transportation and so on. This thesis aims to improve the current state of the art in a particular field: Underwater Robotics. Currently, the research in this area focuses on improving robots capabilities to make them more and more efficient in performing missions autonomously. A particular advancement is towards the cooperation between multiple agents. With cooperation the robotics systems can perform more and more difficult tasks, such as carrying a long and heavy object in an unstructured environment. 
